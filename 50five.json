@@ -1,0 +1,278 @@
+[
+    {
+        "id": "b0ed2ae7b983cb3e",
+        "type": "tab",
+        "label": "50five",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "inject_login",
+        "type": "inject",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Trigger Login",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 190,
+        "y": 60,
+        "wires": [
+            [
+                "build_login_request"
+            ]
+        ]
+    },
+    {
+        "id": "build_login_request",
+        "type": "function",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Build Login Request",
+        "func": "let username = env.get(\"LOGIN_USERNAME\") || \"USERNAME\";\nlet password = env.get(\"LOGIN_PASSWORD\") || \"PASSWORD\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Login/Login\"\n};\nmsg.payload = `emailField=${encodeURIComponent(username)}&passwordField=${encodeURIComponent(password)}&Login=Aanmelden`;\nmsg.method = \"POST\";\nmsg.url = \"https://50five-snl.evc-net.com/Login/Login\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 120,
+        "wires": [
+            [
+                "http_login"
+            ]
+        ]
+    },
+    {
+        "id": "http_login",
+        "type": "http request",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Login Request",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 180,
+        "y": 180,
+        "wires": [
+            [
+                "extract_cookie"
+            ]
+        ]
+    },
+    {
+        "id": "extract_cookie",
+        "type": "function",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Extract Session Cookie",
+        "func": "let sessionCookie = null;\n\n// Prefer the last PHPSESSID in redirectList if available\nif (msg.redirectList && msg.redirectList.length > 0) {\n    for (let i = msg.redirectList.length - 1; i >= 0; i--) {\n        let cookies = msg.redirectList[i].cookies;\n        if (cookies && cookies.PHPSESSID && cookies.PHPSESSID.value) {\n            sessionCookie = 'PHPSESSID=' + cookies.PHPSESSID.value;\n            break;\n        }\n    }\n}\n\n// Fallback to responseCookies if not found in redirectList\nif (!sessionCookie && msg.responseCookies && msg.responseCookies.PHPSESSID && msg.responseCookies.PHPSESSID.value) {\n    sessionCookie = 'PHPSESSID=' + msg.responseCookies.PHPSESSID.value;\n}\n\n// Fallback to set-cookie header (as before)\nif (!sessionCookie) {\n    let headers = msg.responseHeaders || msg.headers;\n    if (headers && headers['set-cookie']) {\n        let cookies = headers['set-cookie'];\n        let found = cookies.find(c => c.includes('PHPSESSID'));\n        if (found) {\n            sessionCookie = found.split(';')[0];\n        }\n    }\n}\n\nif (sessionCookie) {\n    flow.set('session_cookie', sessionCookie);\n}\n\n// Extract SERVERID\nlet serverId = null;\nif (msg.redirectList && msg.redirectList.length > 0) {\n    for (let i = msg.redirectList.length - 1; i >= 0; i--) {\n        let cookies = msg.redirectList[i].cookies;\n        if (cookies && cookies.SERVERID && cookies.SERVERID.value) {\n            serverId = 'SERVERID=' + cookies.SERVERID.value;\n            break;\n        }\n    }\n}\n\nif (!serverId && msg.responseCookies && msg.responseCookies.SERVERID && msg.responseCookies.SERVERID.value) {\n    serverId = 'SERVERID=' + msg.responseCookies.SERVERID.value;\n}\n\nif (!serverId) {\n    let headers = msg.responseHeaders || msg.headers;\n    if (headers && headers['set-cookie']) {\n        let cookies = headers['set-cookie'];\n        let found = cookies.find(c => c.includes('SERVERID'));\n        if (found) {\n            serverId = found.split(';')[0];\n        }\n    }\n}\n\nif (serverId) {\n    flow.set('serverid_cookie', serverId);\n}\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 150,
+        "y": 240,
+        "wires": [
+            [
+                "debug_login_response",
+                "clear_msg_url_method"
+            ]
+        ]
+    },
+    {
+        "id": "clear_msg_url_method",
+        "type": "function",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Clear msg.url/method",
+        "func": "delete msg.url;\ndelete msg.method;\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 160,
+        "y": 300,
+        "wires": [
+            [
+                "get_overview"
+            ]
+        ]
+    },
+    {
+        "id": "get_overview",
+        "type": "http request",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Get Overview",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/Overview",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 180,
+        "y": 360,
+        "wires": [
+            [
+                "build_status_request",
+                "build_occupancy_request"
+            ]
+        ]
+    },
+    {
+        "id": "build_occupancy_request",
+        "type": "function",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Build Occupancy Request",
+        "func": "let sessionCookie = flow.get(\"session_cookie\") || \"\";\nlet serverIdCookie = flow.get(\"serverid_cookie\") || \"\";\nlet cookieHeader = sessionCookie;\n\nif (serverIdCookie) {\n    cookieHeader += '; ' + serverIdCookie;\n}\n\ncookieHeader += '; darkMode=1';\n// Add analytics cookies (example values from HAR/cURL)\ncookieHeader += '; _pk_id.6.d2d7=59e22ce3a05f9f02.1752928268.; _pk_ses.6.d2d7=1';\n\nmsg.method = 'GET';\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D&metricKey=EndUserOverviewView_141';\nmsg.headers = {\n    \"Cookie\": cookieHeader,\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Overview\",\n    \"X-Requested-With\": \"XMLHttpRequest\"\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 430,
+        "y": 360,
+        "wires": [
+            [
+                "occupancy_request"
+            ]
+        ]
+    },
+    {
+        "id": "occupancy_request",
+        "type": "http request",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Occupancy Request",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 680,
+        "y": 360,
+        "wires": [
+            [
+                "debug_occupancy_response"
+            ]
+        ]
+    },
+    {
+        "id": "debug_occupancy_response",
+        "type": "debug",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Occupancy Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 920,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "debug_login_response",
+        "type": "debug",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Login Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "build_status_request",
+        "type": "function",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Build Status Request",
+        "func": "let sessionCookie = flow.get(\"session_cookie\") || \"\";\nlet serverIdCookie = flow.get(\"serverid_cookie\") || \"\";\nlet cookieHeader = sessionCookie;\n\nif (serverIdCookie) {\n    cookieHeader += '; ' + serverIdCookie;\n}\n\ncookieHeader += '; darkMode=1';\n// Add analytics cookies (example values from HAR/cURL)\ncookieHeader += '; _pk_id.6.d2d7=59e22ce3a05f9f02.1752928268.; _pk_ses.6.d2d7=1';\n\nmsg.method = 'GET';\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserOverviewView_151';\nmsg.headers = {\n    \"Cookie\": cookieHeader,\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Overview\",\n    \"X-Requested-With\": \"XMLHttpRequest\"\n};\n\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 420,
+        "wires": [
+            [
+                "http_status_request"
+            ]
+        ]
+    },
+    {
+        "id": "http_status_request",
+        "type": "http request",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Status Request",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 660,
+        "y": 420,
+        "wires": [
+            [
+                "debug_status_response"
+            ]
+        ]
+    },
+    {
+        "id": "debug_status_response",
+        "type": "debug",
+        "z": "b0ed2ae7b983cb3e",
+        "name": "Status Response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 910,
+        "y": 420,
+        "wires": []
+    }
+]
