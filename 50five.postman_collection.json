@@ -1,0 +1,613 @@
+{
+	"info": {
+		"_postman_id": "f1d5169f-91c1-4efe-bd54-178a609e42c0",
+		"name": "50five",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1339738"
+	},
+	"item": [
+		{
+			"name": "API",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "username",
+							"value": "<USERNAME HERE>",
+							"type": "string"
+						},
+						{
+							"key": "password",
+							"value": "<PASSWORD HERE>",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "Authorization",
+							"value": "Basic <<USERNAME HERE>:<PASSWORD HERE>>",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://accp.evc-net.com/oauth/v2/token",
+					"protocol": "https",
+					"host": [
+						"accp",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"oauth",
+						"v2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/Login/Login",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"Login",
+						"Login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EndUserOverviewView_141",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D&metricKey=EndUserOverviewView_141",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "EndUserOverviewView_141"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EndUserOverviewView_151",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserOverviewView_151",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "EndUserOverviewView_151"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EndUserRechargeSpotListView_99",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D&metricKey=EndUserRechargeSpotListView_99",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "EndUserRechargeSpotListView_99"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "EndUserRechargeSpotDetailsView_116",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A7%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A1%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserRechargeSpotDetailsView_116",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A7%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A1%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22maxCache%22%3A3600%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "EndUserRechargeSpotDetailsView_116"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Devices: DeviceMap_432",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D&metricKey=DeviceMap_432",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22<CHARGESPOT HERE>%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "DeviceMap_432"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Connection: RechargeSpotDashboard_149",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "RechargeSpotDashboard_149"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User: RechargeSpotDashboard_642",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22input%22%3A%22<NAME HERE>%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22input%22%3A%22<NAME HERE>%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "RechargeSpotDashboard_642"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cards: RechargeSpotDashboard_688",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22customerId%22%3A%22<CUSTOMERID HERE>%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22customerId%22%3A%22<CUSTOMERID HERE>%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "RechargeSpotDashboard_688"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Start Charge: RechargeSpotDashboard_1021",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StartTransaction%22%2C%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%2C%22customer%22%3A%22<CUSTOMERID HERE>%22%2C%22card%22%3A%22<CARDID HERE>%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StartTransaction%22%2C%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%2C%22customer%22%3A%22<CUSTOMERID HERE>%22%2C%22card%22%3A%22<CARDID HERE>%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "DeviceMap_432"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Stop Charge: RechargeSpotDashboard_1021",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "emailField",
+							"value": "<USERNAME HERE>",
+							"type": "text"
+						},
+						{
+							"key": "passwordField",
+							"value": "<PASSWORD HERE>",
+							"type": "text"
+						},
+						{
+							"key": "Login",
+							"value": "Aanmelden",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StopTransaction%22%2C%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%221%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021",
+					"protocol": "https",
+					"host": [
+						"50five-snl",
+						"evc-net",
+						"com"
+					],
+					"path": [
+						"api",
+						"ajax"
+					],
+					"query": [
+						{
+							"key": "requests",
+							"value": "%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StopTransaction%22%2C%22rechargeSpotId%22%3A%22<CHARGESPOT HERE>%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%221%22%7D%7D%7D"
+						},
+						{
+							"key": "metricKey",
+							"value": "RechargeSpotDashboard_1021"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
