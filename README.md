@@ -21,9 +21,9 @@ _50five.postman_collection.json_
 This is my (anonimized) json collection. API connection doesn't work but the others do...
 
 Make sure to replace:
-<USERNAME HERE> = your 50five username
-<PASSWORD HERE> = your 50five password
-<CHARGESPOT HERE> = the chargespot ID returned by EndUserRechargeSpotListView_99
-<NAME HERE> = a name that is used to search for customers in your chargespot (my first name in my case)
-<CUSTOMERID HERE> = the customer id returned by RechargeSpotDashboard_642
-<CARDID HERE> = the card id returned by RechargeSpotDashboard_688
+&lt;USERNAME HERE&gt; = your 50five username
+&lt;PASSWORD HERE&gt; = your 50five password
+&lt;CHARGESPOT HERE&gt; = the chargespot ID returned by EndUserRechargeSpotListView_99
+&lt;NAME HERE&gt; = a name that is used to search for customers in your chargespot (my first name in my case)
+&lt;CUSTOMERID HERE&gt; = the customer id returned by RechargeSpotDashboard_642
+&lt;CARDID HERE&gt; = the card id returned by RechargeSpotDashboard_688
