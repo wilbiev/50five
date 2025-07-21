@@ -14,6 +14,7 @@ Current version only logs in and gets some basic information, nothing fancy yet.
 
 <img width="1462" height="931" alt="image" src="https://github.com/user-attachments/assets/b8f57480-cd44-4af4-a0c5-a82b2453e18e" />
 
+
 _50five.postman_collection.json_
 
 This is my (anonimized) json collection. API connection doesn't work but the others do...
