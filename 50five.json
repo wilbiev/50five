@@ -1,6 +1,6 @@
 [
     {
-        "id": "b0ed2ae7b983cb3e",
+        "id": "flow_50five",
         "type": "tab",
         "label": "50five",
         "disabled": false,
@@ -10,47 +10,63 @@
     {
         "id": "inject_login",
         "type": "inject",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Trigger Login",
-        "props": [],
+        "z": "flow_50five",
+        "name": "Start Login",
+        "props": [
+            {
+                "p": "username",
+                "v": "<USERNAME HERE>",
+                "vt": "str"
+            },
+            {
+                "p": "password",
+                "v": "<PASSWORD HERE>",
+                "vt": "str"
+            },
+            {
+                "p": "max_retries",
+                "v": "3",
+                "vt": "num"
+            }
+        ],
         "repeat": "",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 190,
-        "y": 60,
+        "x": 100,
+        "y": 40,
         "wires": [
             [
-                "build_login_request"
+                "login_function"
             ]
         ]
     },
     {
-        "id": "build_login_request",
+        "id": "login_function",
         "type": "function",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Build Login Request",
-        "func": "let username = env.get(\"LOGIN_USERNAME\") || \"USERNAME\";\nlet password = env.get(\"LOGIN_PASSWORD\") || \"PASSWORD\";\n\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Login/Login\"\n};\nmsg.payload = `emailField=${encodeURIComponent(username)}&passwordField=${encodeURIComponent(password)}&Login=Aanmelden`;\nmsg.method = \"POST\";\nmsg.url = \"https://50five-snl.evc-net.com/Login/Login\";\n\nreturn msg;\n",
+        "z": "flow_50five",
+        "name": "Login with Retry",
+        "func": "var retries = msg.max_retries || 3;\nvar attempt = msg.attempt || 1;\n\nlet username = msg.username || env.get(\"LOGIN_USERNAME\") || flow.get(\"LOGIN_USERNAME\") || \"USERNAME\";\nlet password = msg.password || env.get(\"LOGIN_PASSWORD\") || flow.get(\"LOGIN_PASSWORD\") || \"PASSWORD\";\n\nmsg.url = 'https://50five-snl.evc-net.com/Login/Login';\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Login/Login\"\n};\nmsg.method = \"POST\";\nmsg.payload = `emailField=${encodeURIComponent(username)}`;\nmsg.payload += `&passwordField=${encodeURIComponent(password)}`;\nmsg.attempt = attempt;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 160,
-        "y": 120,
+        "x": 320,
+        "y": 40,
         "wires": [
             [
-                "http_login"
+                "login_request"
             ]
         ]
     },
     {
-        "id": "http_login",
+        "id": "login_request",
         "type": "http request",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Login Request",
+        "z": "flow_50five",
+        "name": "POST Login",
         "method": "use",
         "ret": "txt",
         "paytoqs": "ignore",
@@ -62,129 +78,43 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 180,
-        "y": 180,
+        "x": 520,
+        "y": 40,
         "wires": [
             [
-                "extract_cookie"
+                "check_login"
             ]
         ]
     },
     {
-        "id": "extract_cookie",
+        "id": "check_login",
         "type": "function",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Extract Session Cookie",
-        "func": "let sessionCookie = null;\n\n// Prefer the last PHPSESSID in redirectList if available\nif (msg.redirectList && msg.redirectList.length > 0) {\n    for (let i = msg.redirectList.length - 1; i >= 0; i--) {\n        let cookies = msg.redirectList[i].cookies;\n        if (cookies && cookies.PHPSESSID && cookies.PHPSESSID.value) {\n            sessionCookie = 'PHPSESSID=' + cookies.PHPSESSID.value;\n            break;\n        }\n    }\n}\n\n// Fallback to responseCookies if not found in redirectList\nif (!sessionCookie && msg.responseCookies && msg.responseCookies.PHPSESSID && msg.responseCookies.PHPSESSID.value) {\n    sessionCookie = 'PHPSESSID=' + msg.responseCookies.PHPSESSID.value;\n}\n\n// Fallback to set-cookie header (as before)\nif (!sessionCookie) {\n    let headers = msg.responseHeaders || msg.headers;\n    if (headers && headers['set-cookie']) {\n        let cookies = headers['set-cookie'];\n        let found = cookies.find(c => c.includes('PHPSESSID'));\n        if (found) {\n            sessionCookie = found.split(';')[0];\n        }\n    }\n}\n\nif (sessionCookie) {\n    flow.set('session_cookie', sessionCookie);\n}\n\n// Extract SERVERID\nlet serverId = null;\nif (msg.redirectList && msg.redirectList.length > 0) {\n    for (let i = msg.redirectList.length - 1; i >= 0; i--) {\n        let cookies = msg.redirectList[i].cookies;\n        if (cookies && cookies.SERVERID && cookies.SERVERID.value) {\n            serverId = 'SERVERID=' + cookies.SERVERID.value;\n            break;\n        }\n    }\n}\n\nif (!serverId && msg.responseCookies && msg.responseCookies.SERVERID && msg.responseCookies.SERVERID.value) {\n    serverId = 'SERVERID=' + msg.responseCookies.SERVERID.value;\n}\n\nif (!serverId) {\n    let headers = msg.responseHeaders || msg.headers;\n    if (headers && headers['set-cookie']) {\n        let cookies = headers['set-cookie'];\n        let found = cookies.find(c => c.includes('SERVERID'));\n        if (found) {\n            serverId = found.split(';')[0];\n        }\n    }\n}\n\nif (serverId) {\n    flow.set('serverid_cookie', serverId);\n}\n\nreturn msg;\n",
-        "outputs": 1,
+        "z": "flow_50five",
+        "name": "Check Login Success",
+        "func": "// Check for login success by inspecting HTML\nvar cookies = msg.responseCookies || {};\nvar phpsessid = cookies.PHPSESSID ? cookies.PHPSESSID.value : null;\nvar serverid = cookies.SERVERID ? cookies.SERVERID.value : null;\nvar html = msg.payload || '';\n\nif (html.indexOf('signed-out') === -1 && phpsessid && serverid) {\n    // Success: store cookies\n    flow.set('PHPSESSID', phpsessid);\n    flow.set('SERVERID', serverid);\n    msg.payload = 'Login successful';\n    return [msg, null];\n} else if (msg.attempt < msg.retries) {\n    // Retry\n    msg.attempt += 1;\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.retries + ' attempts';\n    return [msg, null];\n}\n",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 150,
-        "y": 240,
+        "x": 740,
+        "y": 40,
         "wires": [
             [
-                "debug_login_response",
-                "clear_msg_url_method"
+                "login_success"
+            ],
+            [
+                "bc6bd75ead89fb96",
+                "1a129ae0214a47ca"
             ]
         ]
     },
     {
-        "id": "clear_msg_url_method",
-        "type": "function",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Clear msg.url/method",
-        "func": "delete msg.url;\ndelete msg.method;\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 160,
-        "y": 300,
-        "wires": [
-            [
-                "get_overview"
-            ]
-        ]
-    },
-    {
-        "id": "get_overview",
-        "type": "http request",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Get Overview",
-        "method": "GET",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "https://50five-snl.evc-net.com/Overview",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 180,
-        "y": 360,
-        "wires": [
-            [
-                "build_status_request",
-                "build_occupancy_request"
-            ]
-        ]
-    },
-    {
-        "id": "build_occupancy_request",
-        "type": "function",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Build Occupancy Request",
-        "func": "let sessionCookie = flow.get(\"session_cookie\") || \"\";\nlet serverIdCookie = flow.get(\"serverid_cookie\") || \"\";\nlet cookieHeader = sessionCookie;\n\nif (serverIdCookie) {\n    cookieHeader += '; ' + serverIdCookie;\n}\n\ncookieHeader += '; darkMode=1';\n// Add analytics cookies (example values from HAR/cURL)\ncookieHeader += '; _pk_id.6.d2d7=59e22ce3a05f9f02.1752928268.; _pk_ses.6.d2d7=1';\n\nmsg.method = 'GET';\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D&metricKey=EndUserOverviewView_141';\nmsg.headers = {\n    \"Cookie\": cookieHeader,\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Overview\",\n    \"X-Requested-With\": \"XMLHttpRequest\"\n};\n\nreturn msg;\n",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 430,
-        "y": 360,
-        "wires": [
-            [
-                "occupancy_request"
-            ]
-        ]
-    },
-    {
-        "id": "occupancy_request",
-        "type": "http request",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Occupancy Request",
-        "method": "use",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 680,
-        "y": 360,
-        "wires": [
-            [
-                "debug_occupancy_response"
-            ]
-        ]
-    },
-    {
-        "id": "debug_occupancy_response",
+        "id": "login_success",
         "type": "debug",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Occupancy Response",
+        "z": "flow_50five",
+        "name": "Login Result",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -193,15 +123,15 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 920,
-        "y": 360,
+        "x": 990,
+        "y": 20,
         "wires": []
     },
     {
-        "id": "debug_login_response",
+        "id": "bc6bd75ead89fb96",
         "type": "debug",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Login Response",
+        "z": "flow_50five",
+        "name": "Failed Login result",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -210,35 +140,175 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 900,
-        "y": 240,
+        "x": 1010,
+        "y": 60,
         "wires": []
     },
     {
-        "id": "build_status_request",
+        "id": "1a129ae0214a47ca",
+        "type": "delay",
+        "z": "flow_50five",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 540,
+        "y": 120,
+        "wires": [
+            [
+                "login_function"
+            ]
+        ]
+    },
+    {
+        "id": "b28301f6edd31dbd",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Start Charging",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "8cd511bb2303aeb5"
+            ]
+        ]
+    },
+    {
+        "id": "8cd511bb2303aeb5",
         "type": "function",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Build Status Request",
-        "func": "let sessionCookie = flow.get(\"session_cookie\") || \"\";\nlet serverIdCookie = flow.get(\"serverid_cookie\") || \"\";\nlet cookieHeader = sessionCookie;\n\nif (serverIdCookie) {\n    cookieHeader += '; ' + serverIdCookie;\n}\n\ncookieHeader += '; darkMode=1';\n// Add analytics cookies (example values from HAR/cURL)\ncookieHeader += '; _pk_id.6.d2d7=59e22ce3a05f9f02.1752928268.; _pk_ses.6.d2d7=1';\n\nmsg.method = 'GET';\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserOverviewView_151';\nmsg.headers = {\n    \"Cookie\": cookieHeader,\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Overview\",\n    \"X-Requested-With\": \"XMLHttpRequest\"\n};\n\nreturn msg;\n",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 420,
+        "x": 320,
+        "y": 240,
         "wires": [
             [
-                "http_status_request"
+                "b69ded937dc8f377"
             ]
         ]
     },
     {
-        "id": "http_status_request",
+        "id": "9a29c7f760b2e257",
         "type": "http request",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Status Request",
+        "z": "flow_50five",
+        "name": "Get Device ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D&metricKey=DeviceMap_432",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 240,
+        "wires": [
+            [
+                "813dae895291dd6a"
+            ]
+        ]
+    },
+    {
+        "id": "0d7a44a96987b754",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get Channel ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 300,
+        "wires": [
+            [
+                "67733d376d517650"
+            ]
+        ]
+    },
+    {
+        "id": "363c7cdcf76557f1",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get User ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22input%22%3A%22%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 360,
+        "wires": [
+            [
+                "7a6027fe43bbb1bd"
+            ]
+        ]
+    },
+    {
+        "id": "224602011d2bda17",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get Card ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22customerId%22%3A%22' + customerid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [
+                "2083c44bdb948b61"
+            ]
+        ]
+    },
+    {
+        "id": "2c73f11b6dfc1674",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Start Charging",
         "method": "use",
         "ret": "txt",
         "paytoqs": "ignore",
@@ -250,29 +320,1626 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 660,
-        "y": 420,
+        "x": 960,
+        "y": 480,
         "wires": [
             [
-                "debug_status_response"
+                "b90a0e7e1a75064a"
             ]
         ]
     },
     {
-        "id": "debug_status_response",
+        "id": "4fd85e6f24d53557",
         "type": "debug",
-        "z": "b0ed2ae7b983cb3e",
-        "name": "Status Response",
+        "z": "flow_50five",
+        "name": "DeviceMap_432 Result",
         "active": true,
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 910,
+        "x": 1230,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "928d34a38130faa3",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_149 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "5faebe3cfa605e76",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_642 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "76fed86a8e5fc579",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_688 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
         "y": 420,
         "wires": []
+    },
+    {
+        "id": "b90a0e7e1a75064a",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_1021 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "813dae895291dd6a",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract deviceid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar deviceid = payload[0][0].device;\n\nflow.set('deviceid', deviceid);\nmsg.deviceid = deviceid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 240,
+        "wires": [
+            [
+                "4fd85e6f24d53557",
+                "f0ab289145978812"
+            ]
+        ]
+    },
+    {
+        "id": "67733d376d517650",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract channelid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar channelid = payload[0][0].CHANNEL;\n\nflow.set('channelid', channelid);\nmsg.channelid = channelid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 970,
+        "y": 300,
+        "wires": [
+            [
+                "928d34a38130faa3",
+                "41e0839d686c090a"
+            ]
+        ]
+    },
+    {
+        "id": "7a6027fe43bbb1bd",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract customerid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar customerid = payload[0][0].id;\n\nflow.set('customerid', customerid);\nmsg.customerid = customerid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 360,
+        "wires": [
+            [
+                "5faebe3cfa605e76",
+                "6b7143168e415ee4"
+            ]
+        ]
+    },
+    {
+        "id": "2083c44bdb948b61",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract cardid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\n// Warning: in my case it's the second card, therefore [1]\nvar cardid = payload[0][1].id;\n\nflow.set('cardid', cardid);\nmsg.cardid = cardid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 420,
+        "wires": [
+            [
+                "76fed86a8e5fc579",
+                "b05c3564e49ad30a"
+            ]
+        ]
+    },
+    {
+        "id": "1dabc1857f591427",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Build URL",
+        "func": "var deviceid = flow.get('deviceid');\nvar customerid = flow.get('customerid');\nvar cardid = flow.get('cardid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StartTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%2C%22customer%22%3A%22' + customerid + '%22%2C%22card%22%3A%22' + cardid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 480,
+        "wires": [
+            [
+                "2c73f11b6dfc1674"
+            ]
+        ]
+    },
+    {
+        "id": "efdbb6d95426410d",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Stop Charging",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 560,
+        "wires": [
+            [
+                "21b59633cef8621b"
+            ]
+        ]
+    },
+    {
+        "id": "21b59633cef8621b",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 560,
+        "wires": [
+            [
+                "d31cc1d75b933e78"
+            ]
+        ]
+    },
+    {
+        "id": "598a310b90681f6d",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get Device ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D&metricKey=DeviceMap_432",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 560,
+        "wires": [
+            [
+                "60c1b397d8efabe5"
+            ]
+        ]
+    },
+    {
+        "id": "df70585f9ad4ff14",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 620,
+        "wires": [
+            [
+                "4151c8bf9dbcd353"
+            ]
+        ]
+    },
+    {
+        "id": "4151c8bf9dbcd353",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get Channel ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 620,
+        "wires": [
+            [
+                "b8d690c6f6fdf78b"
+            ]
+        ]
+    },
+    {
+        "id": "4f83bcba1a73a9f0",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 680,
+        "wires": [
+            [
+                "ca4725fe54f86ee9"
+            ]
+        ]
+    },
+    {
+        "id": "ca4725fe54f86ee9",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get User ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22input%22%3A%22%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 680,
+        "wires": [
+            [
+                "a05870dcc5983d32"
+            ]
+        ]
+    },
+    {
+        "id": "04f0e06839d48c9b",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 740,
+        "wires": [
+            [
+                "ba691de199fed6b7"
+            ]
+        ]
+    },
+    {
+        "id": "ba691de199fed6b7",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Get Card ID",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22customerId%22%3A%22' + customerid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 750,
+        "y": 740,
+        "wires": [
+            [
+                "b430b9945432b524"
+            ]
+        ]
+    },
+    {
+        "id": "c03df901cc3c18ae",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 800,
+        "wires": [
+            [
+                "3cb5514e2c16a559"
+            ]
+        ]
+    },
+    {
+        "id": "dd314a04252a9e4a",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "Stop Charging",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 960,
+        "y": 800,
+        "wires": [
+            [
+                "1b5ce008e1ff13f2"
+            ]
+        ]
+    },
+    {
+        "id": "942d431664bf1782",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "DeviceMap_432 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1230,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "71b7e22b7a51f7bd",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_149 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "ff6114f06dd9437a",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_642 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "59042d91f614e781",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_688 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "1b5ce008e1ff13f2",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_1021 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1270,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "60c1b397d8efabe5",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract deviceid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar deviceid = payload[0][0].device;\n\nflow.set('deviceid', deviceid);\nmsg.deviceid = deviceid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 560,
+        "wires": [
+            [
+                "942d431664bf1782",
+                "df70585f9ad4ff14"
+            ]
+        ]
+    },
+    {
+        "id": "b8d690c6f6fdf78b",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract channelid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar channelid = payload[0][0].CHANNEL;\n\nflow.set('channelid', channelid);\nmsg.channelid = channelid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 950,
+        "y": 620,
+        "wires": [
+            [
+                "71b7e22b7a51f7bd",
+                "4f83bcba1a73a9f0"
+            ]
+        ]
+    },
+    {
+        "id": "a05870dcc5983d32",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract customerid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar customerid = payload[0][0].id;\n\nflow.set('customerid', customerid);\nmsg.customerid = customerid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 680,
+        "wires": [
+            [
+                "ff6114f06dd9437a",
+                "04f0e06839d48c9b"
+            ]
+        ]
+    },
+    {
+        "id": "b430b9945432b524",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract cardid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\n// Warning: in my case it's the second card, therefore [1]\nvar cardid = payload[0][1].id;\n\nflow.set('cardid', cardid);\nmsg.cardid = cardid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 740,
+        "wires": [
+            [
+                "59042d91f614e781",
+                "c03df901cc3c18ae"
+            ]
+        ]
+    },
+    {
+        "id": "3cb5514e2c16a559",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Build URL",
+        "func": "var channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StopTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%22' + channelid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 740,
+        "y": 800,
+        "wires": [
+            [
+                "dd314a04252a9e4a"
+            ]
+        ]
+    },
+    {
+        "id": "b05c3564e49ad30a",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 480,
+        "wires": [
+            [
+                "1dabc1857f591427"
+            ]
+        ]
+    },
+    {
+        "id": "6b7143168e415ee4",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 420,
+        "wires": [
+            [
+                "224602011d2bda17"
+            ]
+        ]
+    },
+    {
+        "id": "41e0839d686c090a",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 360,
+        "wires": [
+            [
+                "363c7cdcf76557f1"
+            ]
+        ]
+    },
+    {
+        "id": "f0ab289145978812",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 300,
+        "wires": [
+            [
+                "0d7a44a96987b754"
+            ]
+        ]
+    },
+    {
+        "id": "8e51020fb0b1c664",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Cards: Trigger RechargeSpotDashboard_688",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 1600,
+        "wires": [
+            [
+                "d90dfd5ba44a5ad2"
+            ]
+        ]
+    },
+    {
+        "id": "inject_spotsstatus",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Trigger EndUserRechargeSpotDetailsView_116",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 220,
+        "y": 1440,
+        "wires": [
+            [
+                "set_cookies_header"
+            ]
+        ]
+    },
+    {
+        "id": "set_cookies_header",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1440,
+        "wires": [
+            [
+                "http_spotsstatus"
+            ]
+        ]
+    },
+    {
+        "id": "http_spotsstatus",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST EndUserRechargeSpotDetailsView_116",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A7%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A1%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserRechargeSpotDetailsView_116",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1440,
+        "wires": [
+            [
+                "debug_spotsstatus"
+            ]
+        ]
+    },
+    {
+        "id": "debug_spotsstatus",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "EndUserRechargeSpotDetailsView_116 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1420,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "c1322930d76576e6",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Trigger EndUserOverviewView_141",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 1320,
+        "wires": [
+            [
+                "d5783b38cc0065b7"
+            ]
+        ]
+    },
+    {
+        "id": "d5783b38cc0065b7",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1320,
+        "wires": [
+            [
+                "6a6c21af06ee7e67"
+            ]
+        ]
+    },
+    {
+        "id": "6a6c21af06ee7e67",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST EndUserOverviewView_141",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D&metricKey=EndUserOverviewView_141",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 800,
+        "y": 1320,
+        "wires": [
+            [
+                "bd0f762eb3be3b5c"
+            ]
+        ]
+    },
+    {
+        "id": "bd0f762eb3be3b5c",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "EndUserOverviewView_141 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "cfe19938b6a02b5f",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Trigger EndUserOverviewView_151",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 1360,
+        "wires": [
+            [
+                "063385fa724a737f"
+            ]
+        ]
+    },
+    {
+        "id": "063385fa724a737f",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1360,
+        "wires": [
+            [
+                "afccf6e56f86280f"
+            ]
+        ]
+    },
+    {
+        "id": "afccf6e56f86280f",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST EndUserOverviewView_151",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserOverviewView_151",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 800,
+        "y": 1360,
+        "wires": [
+            [
+                "a2452655c6dac0ae"
+            ]
+        ]
+    },
+    {
+        "id": "a2452655c6dac0ae",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "EndUserOverviewView_151 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1380,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "95b451635317f243",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Trigger EndUserRechargeSpotListView_99",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 200,
+        "y": 1400,
+        "wires": [
+            [
+                "4348faf783dc4c14"
+            ]
+        ]
+    },
+    {
+        "id": "4348faf783dc4c14",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1400,
+        "wires": [
+            [
+                "9d9a3c2955c28ff0"
+            ]
+        ]
+    },
+    {
+        "id": "9d9a3c2955c28ff0",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST EndUserRechargeSpotListView_99",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D&metricKey=EndUserRechargeSpotListView_99",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 820,
+        "y": 1400,
+        "wires": [
+            [
+                "74e0553b58ad9665"
+            ]
+        ]
+    },
+    {
+        "id": "74e0553b58ad9665",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "EndUserRechargeSpotListView_99 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1400,
+        "y": 1400,
+        "wires": []
+    },
+    {
+        "id": "f5cadc7a4450ad87",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Devices: Trigger DeviceMap_432",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 1480,
+        "wires": [
+            [
+                "8be23c84e124d269"
+            ]
+        ]
+    },
+    {
+        "id": "8be23c84e124d269",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1480,
+        "wires": [
+            [
+                "4b3327991c7e68dd"
+            ]
+        ]
+    },
+    {
+        "id": "4b3327991c7e68dd",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST DeviceMap_432",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D&metricKey=DeviceMap_432",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 1480,
+        "wires": [
+            [
+                "d8c85e3d8aa8eb37"
+            ]
+        ]
+    },
+    {
+        "id": "341e8f092b2a0757",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "DeviceMap_432 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1350,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "e9611c32afbfc379",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Connections: Trigger RechargeSpotDashboard_149",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 230,
+        "y": 1520,
+        "wires": [
+            [
+                "db0778ca1e028b0b"
+            ]
+        ]
+    },
+    {
+        "id": "db0778ca1e028b0b",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1520,
+        "wires": [
+            [
+                "7e6394090c6369b1"
+            ]
+        ]
+    },
+    {
+        "id": "7e6394090c6369b1",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST RechargeSpotDashboard_149",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 810,
+        "y": 1520,
+        "wires": [
+            [
+                "d3d15c2e0c0acd97"
+            ]
+        ]
+    },
+    {
+        "id": "fc24ab449a3adc03",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_149 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "99d576935dd13ddc",
+        "type": "inject",
+        "z": "flow_50five",
+        "name": "Users: Trigger RechargeSpotDashboard_642",
+        "props": [],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 210,
+        "y": 1560,
+        "wires": [
+            [
+                "9b1314f610cc7397"
+            ]
+        ]
+    },
+    {
+        "id": "9b1314f610cc7397",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1560,
+        "wires": [
+            [
+                "3908c01704cf92e3"
+            ]
+        ]
+    },
+    {
+        "id": "3908c01704cf92e3",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST RechargeSpotDashboard_642",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22input%22%3A%22%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 810,
+        "y": 1560,
+        "wires": [
+            [
+                "43cafee110569bab"
+            ]
+        ]
+    },
+    {
+        "id": "fcf5da63adc4f65a",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_642 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "d90dfd5ba44a5ad2",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Set Cookies Header",
+        "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 1600,
+        "wires": [
+            [
+                "a2d3ea42c1d516b6"
+            ]
+        ]
+    },
+    {
+        "id": "a2d3ea42c1d516b6",
+        "type": "http request",
+        "z": "flow_50five",
+        "name": "POST RechargeSpotDashboard_688",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22customerId%22%3A%22' + customerid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 810,
+        "y": 1600,
+        "wires": [
+            [
+                "c1e0e21bc01b388a"
+            ]
+        ]
+    },
+    {
+        "id": "d574cd6428227ada",
+        "type": "debug",
+        "z": "flow_50five",
+        "name": "RechargeSpotDashboard_688 Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 1600,
+        "wires": []
+    },
+    {
+        "id": "d8c85e3d8aa8eb37",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract deviceid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar deviceid = payload[0][0].device;\n\nflow.set('deviceid', deviceid);\nmsg.deviceid = deviceid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 1480,
+        "wires": [
+            [
+                "341e8f092b2a0757"
+            ]
+        ]
+    },
+    {
+        "id": "d3d15c2e0c0acd97",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract channelid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar channelid = payload[0][0].CHANNEL;\n\nflow.set('channelid', channelid);\nmsg.channelid = channelid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1130,
+        "y": 1520,
+        "wires": [
+            [
+                "fc24ab449a3adc03"
+            ]
+        ]
+    },
+    {
+        "id": "43cafee110569bab",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract customerid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar customerid = payload[0][0].id;\n\nflow.set('customerid', customerid);\nmsg.customerid = customerid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 1560,
+        "wires": [
+            [
+                "fcf5da63adc4f65a"
+            ]
+        ]
+    },
+    {
+        "id": "c1e0e21bc01b388a",
+        "type": "function",
+        "z": "flow_50five",
+        "name": "Extract cardid",
+        "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\n// Warning: in my case it's the second card, therefore [1]\nvar cardid = payload[0][1].id;\n\nflow.set('cardid', cardid);\nmsg.cardid = cardid;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 1600,
+        "wires": [
+            [
+                "d574cd6428227ada"
+            ]
+        ]
+    },
+    {
+        "id": "b69ded937dc8f377",
+        "type": "switch",
+        "z": "flow_50five",
+        "name": "Check login",
+        "property": "headers['Cookie']",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 520,
+        "y": 240,
+        "wires": [
+            [
+                "login_function"
+            ],
+            [
+                "9a29c7f760b2e257"
+            ]
+        ]
+    },
+    {
+        "id": "d31cc1d75b933e78",
+        "type": "switch",
+        "z": "flow_50five",
+        "name": "Check login",
+        "property": "headers['Cookie']",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "null"
+            },
+            {
+                "t": "nnull"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 530,
+        "y": 560,
+        "wires": [
+            [
+                "login_function"
+            ],
+            [
+                "598a310b90681f6d"
+            ]
+        ]
+    },
+    {
+        "id": "025a4386b4a35963",
+        "type": "ha-button",
+        "z": "flow_50five",
+        "name": "Start",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "5107c8f2f1cc0b2a",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 70,
+        "y": 360,
+        "wires": [
+            [
+                "8cd511bb2303aeb5"
+            ]
+        ]
+    },
+    {
+        "id": "6e013ee6fba6d3db",
+        "type": "ha-button",
+        "z": "flow_50five",
+        "name": "Stop",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "055cf74b76541104",
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 70,
+        "y": 680,
+        "wires": [
+            [
+                "21b59633cef8621b"
+            ]
+        ]
+    },
+    {
+        "id": "5107c8f2f1cc0b2a",
+        "type": "ha-entity-config",
+        "server": "6b7ca337.48e8fc",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "Start",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "055cf74b76541104",
+        "type": "ha-entity-config",
+        "server": "6b7ca337.48e8fc",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "Stop",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6b7ca337.48e8fc",
+        "type": "server",
+        "name": "Home Assistant",
+        "addon": false,
+        "rejectUnauthorizedCerts": false,
+        "ha_boolean": "",
+        "connectionDelay": false,
+        "cacheJson": false,
+        "heartbeat": false,
+        "heartbeatInterval": "",
+        "statusSeparator": "",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "8b0d0b1b2ee28c9b",
+        "type": "ha-device-config",
+        "name": "Laadpaal",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
     }
 ]
