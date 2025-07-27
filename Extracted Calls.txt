@@ -1,0 +1,995 @@
+EndUserOverviewView_141
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A3%2C%22maxCache%22%3A600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22transactions%22%2C%22params%22%3A%7B%22transactions%22%3A10%2C%22transactionsMaxAge%22%3Anull%2C%22maxCache%22%3A600%7D%7D%7D&metricKey=EndUserOverviewView_141
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "occupancy",
+		"params": {
+			"mode": 3,
+			"maxCache": 600
+		}
+	},
+	"1": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "current",
+		"params": {
+			"mode": 3,
+			"maxCache": 600
+		}
+	},
+	"2": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "transactions",
+		"params": {
+			"transactions": 10,
+			"transactionsMaxAge": null,
+			"maxCache": 600
+		}
+	}
+}
+[[0.9988412514484357,0.0011587485515643105,0,0],{"labels":["21-jul. 09:00","21-jul. 10:00","21-jul. 11:00","21-jul. 12:00","21-jul. 13:00","21-jul. 14:00","21-jul. 15:00","21-jul. 16:00","21-jul. 17:00","21-jul. 18:00","21-jul. 19:00","21-jul. 20:00","21-jul. 21:00","21-jul. 22:00","21-jul. 23:00","22-jul. 00:00","22-jul. 01:00","22-jul. 02:00","22-jul. 03:00","22-jul. 04:00","22-jul. 05:00","22-jul. 06:00","22-jul. 07:00","22-jul. 08:00","22-jul. 09:00","22-jul. 10:00","22-jul. 11:00","22-jul. 12:00","22-jul. 13:00","22-jul. 14:00","22-jul. 15:00","22-jul. 16:00","22-jul. 17:00","22-jul. 18:00","22-jul. 19:00","22-jul. 20:00","22-jul. 21:00","22-jul. 22:00","22-jul. 23:00","23-jul. 00:00","23-jul. 01:00","23-jul. 02:00","23-jul. 03:00","23-jul. 04:00","23-jul. 05:00","23-jul. 06:00","23-jul. 07:00","23-jul. 08:00","23-jul. 09:00","23-jul. 10:00","23-jul. 11:00","23-jul. 12:00","23-jul. 13:00","23-jul. 14:00","23-jul. 15:00","23-jul. 16:00","23-jul. 17:00","23-jul. 18:00","23-jul. 19:00","23-jul. 20:00","23-jul. 21:00","23-jul. 22:00","23-jul. 23:00","24-jul. 00:00","24-jul. 01:00","24-jul. 02:00","24-jul. 03:00","24-jul. 04:00","24-jul. 05:00","24-jul. 06:00","24-jul. 07:00","24-jul. 08:00"],"datasets":{"1":{"label":"Laadpunt","color":"#60984A","values":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"unit":"kW"},"1_count":{"label":"Transacties","color":"#d0d0d0","values":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"unit":""}}},[{"IDX":270372625,"EVENTDATE":"24-jul. 00:55","EVENTDATE_ISO":"2025-07-23T22:55:12Z","ENDDATE_ISO":"2025-07-23T22:56:35Z","ENDDATE":"24-jul. 00:56","CHANNEL":"1","EXTERNALID":"NL-TNM-D12345-6","CARD_TYPE_ICON":"<\/i>","SPOT_FULL_NAME":"4 (Street Housenr, City, COUNTRY)","ENERGY_CONSUMED_KWH":0.14,"CUSTOMER_PRICE":0.04,"CUSTOMER_PRICE_INCL_VAT":0.05,"OWNER_RECV_PRICE":0.04,"OWNER_RECV_PRICE_INCL_VAT":0.05,"CURRENCY":"EUR","PAYMENT_TYPE":"","HOME_CHARGING":true},{"IDX":269919724,"EVENTDATE":"20-jul. 19:27","EVENTDATE_ISO":"2025-07-20T17:27:09Z","ENDDATE_ISO":"2025-07-20T17:28:23Z","ENDDATE":"20-jul. 19:28","CHANNEL":"1","EXTERNALID":"NL-TNM-D12345-6","CARD_TYPE_ICON":"<\/i>","SPOT_FULL_NAME":"4 (Street Housenr, City, COUNTRY)","ENERGY_CONSUMED_KWH":0.1,"CUSTOMER_PRICE":0.03,"CUSTOMER_PRICE_INCL_VAT":0.04,"OWNER_RECV_PRICE":0.03,"OWNER_RECV_PRICE_INCL_VAT":0.04,"CURRENCY":"EUR","PAYMENT_TYPE":"","HOME_CHARGING":true},{"IDX":269828769,"EVENTDATE":"19-jul. 22:07","EVENTDATE_ISO":"2025-07-19T20:07:52Z","ENDDATE_ISO":"2025-07-19T20:49:34Z","ENDDATE":"19-jul. 22:49","CHANNEL":"1","EXTERNALID":"NL-TNM-D12345-6","CARD_TYPE_ICON":"<\/i>","SPOT_FULL_NAME":"4 (Street Housenr, City, COUNTRY)","ENERGY_CONSUMED_KWH":6.92,"CUSTOMER_PRICE":2.08,"CUSTOMER_PRICE_INCL_VAT":2.52,"OWNER_RECV_PRICE":2.08,"OWNER_RECV_PRICE_INCL_VAT":2.52,"CURRENCY":"EUR","PAYMENT_TYPE":"","HOME_CHARGING":true},{"IDX":269777013,"EVENTDATE":"19-jul. 14:59","EVENTDATE_ISO":"2025-07-19T12:59:17Z","ENDDATE_ISO":"2025-07-19T14:55:44Z","ENDDATE":"19-jul. 16:55","CHANNEL":"1","EXTERNALID":"NL-TNM-D12345-6","CARD_TYPE_ICON":"<\/i>","SPOT_FULL_NAME":"4 (Street Housenr, City, COUNTRY)","ENERGY_CONSUMED_KWH":11.01,"CUSTOMER_PRICE":2.73,"CUSTOMER_PRICE_INCL_VAT":3.3,"OWNER_RECV_PRICE":2.73,"OWNER_RECV_PRICE_INCL_VAT":3.3,"CURRENCY":"EUR","PAYMENT_TYPE":"","HOME_CHARGING":true},{"IDX":269776726,"EVENTDATE":"19-jul. 14:57","EVENTDATE_ISO":"2025-07-19T12:57:23Z","ENDDATE_ISO":"2025-07-19T12:58:42Z","ENDDATE":"19-jul. 14:58","CHANNEL":"1","EXTERNALID":"NL-TNM-D12345-6","CARD_TYPE_ICON":"<\/i>","SPOT_FULL_NAME":"4 (Street Housenr, City, COUNTRY)","ENERGY_CONSUMED_KWH":0.1,"CUSTOMER_PRICE":0.02,"CUSTOMER_PRICE_INCL_VAT":0.02,"OWNER_RECV_PRICE":0.02,"OWNER_RECV_PRICE_INCL_VAT":0.02,"CURRENCY":"EUR","PAYMENT_TYPE":"","HOME_CHARGING":true}]]
+[
+	[
+		0.9988412514484357,
+		0.0011587485515643106,
+		0,
+		0
+	],
+	{
+		"labels": [
+			"21-jul. 09:00",
+			"21-jul. 10:00",
+			"21-jul. 11:00",
+			"21-jul. 12:00",
+			"21-jul. 13:00",
+			"21-jul. 14:00",
+			"21-jul. 15:00",
+			"21-jul. 16:00",
+			"21-jul. 17:00",
+			"21-jul. 18:00",
+			"21-jul. 19:00",
+			"21-jul. 20:00",
+			"21-jul. 21:00",
+			"21-jul. 22:00",
+			"21-jul. 23:00",
+			"22-jul. 00:00",
+			"22-jul. 01:00",
+			"22-jul. 02:00",
+			"22-jul. 03:00",
+			"22-jul. 04:00",
+			"22-jul. 05:00",
+			"22-jul. 06:00",
+			"22-jul. 07:00",
+			"22-jul. 08:00",
+			"22-jul. 09:00",
+			"22-jul. 10:00",
+			"22-jul. 11:00",
+			"22-jul. 12:00",
+			"22-jul. 13:00",
+			"22-jul. 14:00",
+			"22-jul. 15:00",
+			"22-jul. 16:00",
+			"22-jul. 17:00",
+			"22-jul. 18:00",
+			"22-jul. 19:00",
+			"22-jul. 20:00",
+			"22-jul. 21:00",
+			"22-jul. 22:00",
+			"22-jul. 23:00",
+			"23-jul. 00:00",
+			"23-jul. 01:00",
+			"23-jul. 02:00",
+			"23-jul. 03:00",
+			"23-jul. 04:00",
+			"23-jul. 05:00",
+			"23-jul. 06:00",
+			"23-jul. 07:00",
+			"23-jul. 08:00",
+			"23-jul. 09:00",
+			"23-jul. 10:00",
+			"23-jul. 11:00",
+			"23-jul. 12:00",
+			"23-jul. 13:00",
+			"23-jul. 14:00",
+			"23-jul. 15:00",
+			"23-jul. 16:00",
+			"23-jul. 17:00",
+			"23-jul. 18:00",
+			"23-jul. 19:00",
+			"23-jul. 20:00",
+			"23-jul. 21:00",
+			"23-jul. 22:00",
+			"23-jul. 23:00",
+			"24-jul. 00:00",
+			"24-jul. 01:00",
+			"24-jul. 02:00",
+			"24-jul. 03:00",
+			"24-jul. 04:00",
+			"24-jul. 05:00",
+			"24-jul. 06:00",
+			"24-jul. 07:00",
+			"24-jul. 08:00"
+		],
+		"datasets": {
+			"1": {
+				"label": "Laadpunt",
+				"color": "#60984A",
+				"values": [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				"unit": "kW"
+			},
+			"1_count": {
+				"label": "Transacties",
+				"color": "#d0d0d0",
+				"values": [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				"unit": ""
+			}
+		}
+	},
+	[
+		{
+			"IDX": 270372625,
+			"EVENTDATE": "24-jul. 00:55",
+			"EVENTDATE_ISO": "2025-07-23T22:55:12Z",
+			"ENDDATE_ISO": "2025-07-23T22:56:35Z",
+			"ENDDATE": "24-jul. 00:56",
+			"CHANNEL": "1",
+			"EXTERNALID": "NL-TNM-D12345-6",
+			"CARD_TYPE_ICON": "</i>",
+			"SPOT_FULL_NAME": "4 (Street Housenr, City, COUNTRY)",
+			"ENERGY_CONSUMED_KWH": 0.14,
+			"CUSTOMER_PRICE": 0.04,
+			"CUSTOMER_PRICE_INCL_VAT": 0.05,
+			"OWNER_RECV_PRICE": 0.04,
+			"OWNER_RECV_PRICE_INCL_VAT": 0.05,
+			"CURRENCY": "EUR",
+			"PAYMENT_TYPE": "",
+			"HOME_CHARGING": true
+		},
+		{
+			"IDX": 269919724,
+			"EVENTDATE": "20-jul. 19:27",
+			"EVENTDATE_ISO": "2025-07-20T17:27:09Z",
+			"ENDDATE_ISO": "2025-07-20T17:28:23Z",
+			"ENDDATE": "20-jul. 19:28",
+			"CHANNEL": "1",
+			"EXTERNALID": "NL-TNM-D12345-6",
+			"CARD_TYPE_ICON": "</i>",
+			"SPOT_FULL_NAME": "4 (Street Housenr, City, COUNTRY)",
+			"ENERGY_CONSUMED_KWH": 0.1,
+			"CUSTOMER_PRICE": 0.03,
+			"CUSTOMER_PRICE_INCL_VAT": 0.04,
+			"OWNER_RECV_PRICE": 0.03,
+			"OWNER_RECV_PRICE_INCL_VAT": 0.04,
+			"CURRENCY": "EUR",
+			"PAYMENT_TYPE": "",
+			"HOME_CHARGING": true
+		},
+		{
+			"IDX": 269828769,
+			"EVENTDATE": "19-jul. 22:07",
+			"EVENTDATE_ISO": "2025-07-19T20:07:52Z",
+			"ENDDATE_ISO": "2025-07-19T20:49:34Z",
+			"ENDDATE": "19-jul. 22:49",
+			"CHANNEL": "1",
+			"EXTERNALID": "NL-TNM-D12345-6",
+			"CARD_TYPE_ICON": "</i>",
+			"SPOT_FULL_NAME": "4 (Street Housenr, City, COUNTRY)",
+			"ENERGY_CONSUMED_KWH": 6.92,
+			"CUSTOMER_PRICE": 2.08,
+			"CUSTOMER_PRICE_INCL_VAT": 2.52,
+			"OWNER_RECV_PRICE": 2.08,
+			"OWNER_RECV_PRICE_INCL_VAT": 2.52,
+			"CURRENCY": "EUR",
+			"PAYMENT_TYPE": "",
+			"HOME_CHARGING": true
+		},
+		{
+			"IDX": 269777013,
+			"EVENTDATE": "19-jul. 14:59",
+			"EVENTDATE_ISO": "2025-07-19T12:59:17Z",
+			"ENDDATE_ISO": "2025-07-19T14:55:44Z",
+			"ENDDATE": "19-jul. 16:55",
+			"CHANNEL": "1",
+			"EXTERNALID": "NL-TNM-D12345-6",
+			"CARD_TYPE_ICON": "</i>",
+			"SPOT_FULL_NAME": "4 (Street Housenr, City, COUNTRY)",
+			"ENERGY_CONSUMED_KWH": 11.01,
+			"CUSTOMER_PRICE": 2.73,
+			"CUSTOMER_PRICE_INCL_VAT": 3.3,
+			"OWNER_RECV_PRICE": 2.73,
+			"OWNER_RECV_PRICE_INCL_VAT": 3.3,
+			"CURRENCY": "EUR",
+			"PAYMENT_TYPE": "",
+			"HOME_CHARGING": true
+		},
+		{
+			"IDX": 269776726,
+			"EVENTDATE": "19-jul. 14:57",
+			"EVENTDATE_ISO": "2025-07-19T12:57:23Z",
+			"ENDDATE_ISO": "2025-07-19T12:58:42Z",
+			"ENDDATE": "19-jul. 14:58",
+			"CHANNEL": "1",
+			"EXTERNALID": "NL-TNM-D12345-6",
+			"CARD_TYPE_ICON": "</i>",
+			"SPOT_FULL_NAME": "4 (Street Housenr, City, COUNTRY)",
+			"ENERGY_CONSUMED_KWH": 0.1,
+			"CUSTOMER_PRICE": 0.02,
+			"CUSTOMER_PRICE_INCL_VAT": 0.02,
+			"OWNER_RECV_PRICE": 0.02,
+			"OWNER_RECV_PRICE_INCL_VAT": 0.02,
+			"CURRENCY": "EUR",
+			"PAYMENT_TYPE": "",
+			"HOME_CHARGING": true
+		}
+	]
+]
+
+EndUserOverviewView_151
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22usage%22%2C%22params%22%3A%7B%22mode%22%3A%22week%22%2C%22maxCache%22%3A3600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22customer%22%2C%22maxCache%22%3A3600%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserOverviewView_151
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "usage",
+		"params": {
+			"mode": "week",
+			"maxCache": 3600
+		}
+	},
+	"1": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "totalUsage",
+		"params": {
+			"mode": "customer",
+			"maxCache": 3600
+		}
+	},
+	"2": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "totalUsage",
+		"params": {
+			"mode": "rechargeSpot",
+			"maxCache": 3600
+		}
+	}
+}
+[{"labels":["14-jul.","21-jul."],"values":[[18.13,0.14],[59.73,0.14]]},{"number":"18","unit":"kWh"},{"number":"59","unit":"kWh"}]
+[
+	{
+		"labels": [
+			"14-jul.",
+			"21-jul."
+		],
+		"values": [
+			[
+				18.13,
+				0.14
+			],
+			[
+				59.73,
+				0.14
+			]
+		]
+	},
+	{
+		"number": "18",
+		"unit": "kWh"
+	},
+	{
+		"number": "59",
+		"unit": "kWh"
+	}
+]
+
+EndUserRechargeSpotListView_99
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D&metricKey=EndUserRechargeSpotListView_99
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "networkOverview",
+		"params": {
+			"mode": "id"
+		}
+	}
+}
+[[{"IDX":"1234567890","NAME":"4","ADDRESS":"07114329, Street Housenr, City, COUNTRY","REFERENCE":"4","COST_CENTER_NUMBER":"7","NETWORK_TYPE":"1","SOFTWARE_VERSION":"1.13.1.3@118.1.1","CHANNEL":"1","MOM_POWER_KW":null,"SOC":null,"TRANS_ENERGY_DELIVERED_KWH":null,"TRANSACTION_TIME_H_M":null,"STATUS":null,"PROFILE_ICON":"fa fa-car","CUSTOMERS_IDX":null,"CUSTOMER_NAME":"","IS_END_USER":true,"OCCUPIED_PERC":0,"ENERGY_USAGE":0,"TARIFF":"","REIMBURSEMENT_TARIFF":"","TOTAL_COST":""}]]
+[
+	[
+		{
+			"IDX": "1234567890",
+			"NAME": "4",
+			"ADDRESS": "07114329, Street Housenr, City, COUNTRY",
+			"REFERENCE": "4",
+			"COST_CENTER_NUMBER": "7",
+			"NETWORK_TYPE": "1",
+			"SOFTWARE_VERSION": "1.13.1.3@118.1.1",
+			"CHANNEL": "1",
+			"MOM_POWER_KW": null,
+			"SOC": null,
+			"TRANS_ENERGY_DELIVERED_KWH": null,
+			"TRANSACTION_TIME_H_M": null,
+			"STATUS": null,
+			"PROFILE_ICON": "fa fa-car",
+			"CUSTOMERS_IDX": null,
+			"CUSTOMER_NAME": "",
+			"IS_END_USER": true,
+			"OCCUPIED_PERC": 0,
+			"ENERGY_USAGE": 0,
+			"TARIFF": "",
+			"REIMBURSEMENT_TARIFF": "",
+			"TOTAL_COST": ""
+		}
+	]
+]
+
+EndUserRechargeSpotDetailsView_116
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22occupancy%22%2C%22params%22%3A%7B%22mode%22%3A7%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22maxCache%22%3A600%7D%7D%2C%221%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22current%22%2C%22params%22%3A%7B%22mode%22%3A1%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%7D%7D%2C%222%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22totalUsage%22%2C%22params%22%3A%7B%22mode%22%3A%22rechargeSpot%22%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22maxCache%22%3A3600%7D%7D%7D&metricKey=EndUserRechargeSpotDetailsView_116
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "occupancy",
+		"params": {
+			"mode": 7,
+			"rechargeSpotIds": [
+				"1234567890"
+			],
+			"maxCache": 600
+		}
+	},
+	"1": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "current",
+		"params": {
+			"mode": 1,
+			"rechargeSpotIds": [
+				"1234567890"
+			]
+		}
+	},
+	"2": {
+		"handler": "\\LMS\\EV\\AsyncServices\\DashboardAsyncService",
+		"method": "totalUsage",
+		"params": {
+			"mode": "rechargeSpot",
+			"rechargeSpotIds": [
+				"1234567890"
+			],
+			"maxCache": 3600
+		}
+	}
+}
+[[0.9607843137254902,0.0392156862745098,0,0],{"labels":["08:45","09:00","09:15","09:30","09:45","10:00","10:15","10:30","10:45","11:00","11:15","11:30","11:45","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00","17:15","17:30","17:45","18:00","18:15","18:30","18:45","19:00","19:15","19:30","19:45","20:00","20:15","20:30","20:45","21:00","21:15","21:30","21:45","22:00","22:15","22:30","22:45","23:00","23:15","23:30","23:45","00:00","00:15","00:30","00:45","01:00","01:15","01:30","01:45","02:00","02:15","02:30","02:45","03:00","03:15","03:30","03:45","04:00","04:15","04:30","04:45","05:00","05:15","05:30","05:45","06:00","06:15","06:30","06:45","07:00","07:15","07:30","07:45","08:00","08:15"],"datasets":{"1":{"label":"Laadpunt","color":"#60984A","values":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"unit":"kW"},"1_count":{"label":"Transacties","color":"#d0d0d0","values":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"unit":""}}},{"number":"59","unit":"kWh"}]
+[
+	[
+		0.9607843137254902,
+		0.0392156862745098,
+		0,
+		0
+	],
+	{
+		"labels": [
+			"08:45",
+			"09:00",
+			"09:15",
+			"09:30",
+			"09:45",
+			"10:00",
+			"10:15",
+			"10:30",
+			"10:45",
+			"11:00",
+			"11:15",
+			"11:30",
+			"11:45",
+			"12:00",
+			"12:15",
+			"12:30",
+			"12:45",
+			"13:00",
+			"13:15",
+			"13:30",
+			"13:45",
+			"14:00",
+			"14:15",
+			"14:30",
+			"14:45",
+			"15:00",
+			"15:15",
+			"15:30",
+			"15:45",
+			"16:00",
+			"16:15",
+			"16:30",
+			"16:45",
+			"17:00",
+			"17:15",
+			"17:30",
+			"17:45",
+			"18:00",
+			"18:15",
+			"18:30",
+			"18:45",
+			"19:00",
+			"19:15",
+			"19:30",
+			"19:45",
+			"20:00",
+			"20:15",
+			"20:30",
+			"20:45",
+			"21:00",
+			"21:15",
+			"21:30",
+			"21:45",
+			"22:00",
+			"22:15",
+			"22:30",
+			"22:45",
+			"23:00",
+			"23:15",
+			"23:30",
+			"23:45",
+			"00:00",
+			"00:15",
+			"00:30",
+			"00:45",
+			"01:00",
+			"01:15",
+			"01:30",
+			"01:45",
+			"02:00",
+			"02:15",
+			"02:30",
+			"02:45",
+			"03:00",
+			"03:15",
+			"03:30",
+			"03:45",
+			"04:00",
+			"04:15",
+			"04:30",
+			"04:45",
+			"05:00",
+			"05:15",
+			"05:30",
+			"05:45",
+			"06:00",
+			"06:15",
+			"06:30",
+			"06:45",
+			"07:00",
+			"07:15",
+			"07:30",
+			"07:45",
+			"08:00",
+			"08:15"
+		],
+		"datasets": {
+			"1": {
+				"label": "Laadpunt",
+				"color": "#60984A",
+				"values": [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				"unit": "kW"
+			},
+			"1_count": {
+				"label": "Transacties",
+				"color": "#d0d0d0",
+				"values": [
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0,
+					0
+				],
+				"unit": ""
+			}
+		}
+	},
+	{
+		"number": "59",
+		"unit": "kWh"
+	}
+]
+
+DeviceMap_432
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22spotsStatus%22%2C%22params%22%3A%7B%22active%22%3Atrue%2C%22rechargeSpotIds%22%3A%5B%22' + deviceid + '%22%5D%2C%22provider%22%3Anull%2C%22profile%22%3Anull%2C%22view%22%3A%22clustered%22%2C%22mode%22%3A%22current%22%2C%22maxCache%22%3A0%2C%22bounds%22%3Anull%7D%7D%7D&metricKey=DeviceMap_432
+[[{"id":157169701,"device":1234567890,"lat":null,"lng":null,"stat":1,"w":1}]]
+[
+	[
+		{
+			"id": 157169701,
+			"device": 1234567890,
+			"lat": null,
+			"lng": null,
+			"stat": 1,
+			"w": 1
+		}
+	]
+]
+
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%221234567890%22%2C%22customerId%22%3A%22' + userid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688
+[[{"id":"NL505C12345678","contractId":"NL505C12345678","text":"NL-TNM-123456-6","icon":"<\/i>"},{"id":"NL505C12345678","contractId":"NL505C12345678","text":"NL-TNM-D12345-6","icon":"<\/i>"}]]
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "cardAccess",
+		"params": {
+			"rechargeSpotId": "1234567890",
+			"customerId": "123456"
+		}
+	}
+}
+[[{"id":"NL505C12345678","contractId":"NL505C12345678","text":"NL-TNM-123456-6","icon":"<\/i>"},{"id":"NL505C12345678","contractId":"NL505C12345678","text":"NL-TNM-D12345-6","icon":"<\/i>"}]]
+[
+	[
+		{
+			"id": "NL505C12345678",
+			"contractId": "NL505C12345678",
+			"text": "NL-TNM-123456-6",
+			"icon": "</i>"
+		},
+		{
+			"id": "NL505C12345678",
+			"contractId": "NL505C12345678",
+			"text": "NL-TNM-D12345-6",
+			"icon": "</i>"
+		}
+	]
+]
+
+
+
+STATUS
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "overview",
+		"params": {
+			"rechargeSpotId": "1234567890"
+		}
+	}
+}
+[[{"CHANNEL":"1","CONNECTOR":"IEC-62196-T2","MOM_POWER_KW":null,"SOC":null,"TRANS_ENERGY_DELIVERED_KWH":null,"TRANSACTION_TIME_H_M":null,"EVENT_DATA":"","CARDID":"","CARD_TYPE_ICON":"","CARDS_IDX":null,"CUSTOMERS_IDX":null,"CUSTOMER_NAME":"","IS_SELF":false,"IS_GLOBAL_CARD":null,"STATUS":"0","NOTIFICATION":"Gereed","ICON":"fa fa-car"}]]
+[
+	[
+		{
+			"CHANNEL": "1",
+			"CONNECTOR": "IEC-62196-T2",
+			"MOM_POWER_KW": null,
+			"SOC": null,
+			"TRANS_ENERGY_DELIVERED_KWH": null,
+			"TRANSACTION_TIME_H_M": null,
+			"EVENT_DATA": "",
+			"CARDID": "",
+			"CARD_TYPE_ICON": "",
+			"CARDS_IDX": null,
+			"CUSTOMERS_IDX": null,
+			"CUSTOMER_NAME": "",
+			"IS_SELF": false,
+			"IS_GLOBAL_CARD": null,
+			"STATUS": "0",
+			"NOTIFICATION": "Gereed",
+			"ICON": "fa fa-car"
+		}
+	]
+]
+
+ONTGRENDEL
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22UnlockConnector%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%221%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "UnlockConnector",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 0,
+			"channel": "1"
+		}
+	}
+}
+
+DEBLOKKEREN (ALLE KANALEN)
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22Unblock%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "Unblock",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 0,
+			"channel": "0"
+		}
+	}
+}
+
+DEBLOKKEREN (KANAAL 1)
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22Unblock%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%221%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "Unblock",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 0,
+			"channel": "1"
+		}
+	}
+}
+
+BLOKKEREN
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22Block%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "Block",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 0,
+			"channel": "0"
+		}
+	}
+}
+
+ZACHTE RESET
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22SoftReset%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A1%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "SoftReset",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 1
+		}
+	}
+}
+
+HARDE RESET
+https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22HardReset%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A1%7D%7D%7D&metricKey=RechargeSpotDashboard_1021
+{
+	"0": {
+		"handler": "\\LMS\\EV\\AsyncServices\\RechargeSpotsAsyncService",
+		"method": "action",
+		"params": {
+			"action": "HardReset",
+			"rechargeSpotId": "1234567890",
+			"clickedButtonId": 1
+		}
+	}
+}
