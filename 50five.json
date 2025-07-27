@@ -1,17 +1,17 @@
 [
     {
-        "id": "632f0e246544e623",
+        "id": "afe326f672e3cd97",
         "type": "subflow",
-        "name": "50five",
-        "info": "## About this subflow\n\nThis subflow will control 50five (fka. Shell Recharge or Newmotion) car charging equipment.\n\n## Getting started\n\nDrag the 50five node into a flow.\n\nDouble-click on the new node.\n\nUsing the credentials used to login to the 50five website, enter the username and password into the respective fields of the `Edit subflow instance: <xxx>` box which appears.\n\nTo find suitable values for _Charger ID_ and _Card ID_, send a payload (using an inject node, for example) to **_Input_** containing:\n\n> msg.payload = { \"action\": \"setup\" }\n\n<img width=\"438\" alt=\"Data\" src=\"https://user-images.githubusercontent.com/2021563/221404599-3fc7cf22-d4d2-4f6d-a7b0-1c2da7774fa2.png\">\n\nInspect the output (by connecting a debug node to the **_Debug_** output). Find your charger and RFID token card/keyfob details in this- these match the information shown on the Shell Recharge website. The array index for _msg.payload.chargePoints_ and _msg.payload.chargeTokens_ (highlighted by the red circles in the image above) should be entered in the configuration fields _Charger ID_ and _Card ID_ respectively. _These will be a number, usually `0`._\n\n> __Warning__ \n>\n> Card ID and Charger ID must only contain a number derived from the process above. Do not enter the charge card number as printed on a key fob/RFID token card or charge point serial number.\n>\n> <img width=\"493\" alt=\"Screenshot 2023-02-26 at 11 15 27\" src=\"https://user-images.githubusercontent.com/2021563/221416402-dcf6de7b-a260-4730-b201-865174e37598.png\">\n\n## Inputs\n\n> msg.payload = { \"action\": \"_ACTION_\" }\n\n...where _ACTION_ is:\n\n**start** and **stop**\n\nStart or stop a charging session using the configured charger and RFID card/token.\n\nOverride the node settings for _Charger ID ('cid')_ and _Card ID ('tid')_ with:\n\n> msg.payload = { \"action\": \"start\", \"cid\": _\\<number\\>_, \"tid\": _\\<number\\>_ }\n\nAdd a random delay (between 0 and 5 minutes) to the start of a charge with:\n\n> msg.payload = { \"action\": \"start\", \"delay\": true }\n\n**reset**\n\nReset the charging equipment.\n\n**poll**\n\nPoll the charging equipment once for status information: this gives details directly from Shell Recharge like _'Charging'_ and _'Occupied'_. \n\n> msg.payload = { \"action\": \"poll\" }\n\n**rpoll** and **nopoll**\n\nRepeatedly poll the charging equipment for status information.\n\nThe polling interval (in seconds) can be set in (number) _msg.rpoll.interval_ and the duration (in seconds) can be set in (number) _msg.rpoll.duration_, for example:\n\n> msg.payload = { \"action\": \"rpoll\", \"poll\": {\"interval\": 5, \"duration\": 20 } }\n\nThis would poll every 5 seconds for 20 seconds.\n\nStop polling with _nopoll_.\n\nAfter _start_, _stop_ and _reset_, polling will automatically run every 20 seconds for 120 seconds.\n\n**energy**\n\nGet energy consumption information.\n\nThe start time is set in (number) _msg.range.start_ and the end time is set in (number) _msg.range.end_, both in Unix timestamp format, for example:\n\n> msg.payload = { \"action\": \"energy\", \"range\": {\"start\": 1692054000000, \"end\": 1694645999999 } }\n\n**expire**\n\nDelete the current Shell Recharge API token. This will force a login attempt during the next interaction with Shell Recharge.\n\n**flush**\n\nDelete the current Shell Recharge API token, session and cache (which stores account details like chargers and token cards).\n\n**dump**\n\nShow the internal cache.\n\n## Outputs\n\nThe **_Output_** payload is _(boolean) true_ if a charge is in progress, otherwise it is _(boolean) false_. This is also updated when polling is in progress. All other output is from **_Debug_** labelled with topics like _status_, _poll_, _response_, _energy_ and _error_.\n\n## Problems\n\n_HTTP Error [401:x]_\n\nThis means 'Unauthorised'. Check your username and password, or try _expire_.\n\n_HTTP Error [409:x]_\n\n``\"The HTTP 409 Conflict response status code indicates a request conflict with the current state of the target resource.\"`` In the context of Shell Recharge, this probably means you're trying to start a charge while the system is in the process of stopping a session, or maybe resetting. Wait, then try again.\n\n_\"TypeError: Cannot read properties of undefined (reading '[evses|uuid]')\"_\n\nDo not enter the value of `uuid` or `rfid` given the `{\"action\":\"setup\"}` process into the `Edit subflow instance: <xxx>` section. `Charger ID` and `Card ID` should be a number, usually `0`.\n\nOtherwise, get in touch.\n\n## Contact\n\nvia [Github](https://github.com/dgthomson/nodered-shellrecharge)",
+        "name": "50five (subflow)",
+        "info": "## About this subflow\n\nThis subflow will control 50five (fka. Shell Recharge or Newmotion) car charging equipment. It's loosly based on the Shell Recharge script from dgthomson.\n\n## Getting started\n\nDrag the 50five node into a flow.\n\nDouble-click on the new node.\n\nUsing the credentials used to login to the 50five website, enter the username and password into the respective fields of the `Edit subflow instance: <xxx>` box which appears.\n\n## Inputs\n\n> msg.payload = { \"action\": \"_ACTION_\" }\n\n...where _ACTION_ is:\n\n**start** and **stop**\n\nStart or stop a charging session.\n\n> msg.payload = { \"action\": \"start\"}\n\n**reset**\n\nReset the charging equipment.\n\n**poll**\n\nPoll the charging equipment once for status information: this gives details directly from 50five like _'Charging'_ and _'Occupied'_. \n\n> msg.payload = { \"action\": \"poll\" }\n\n## Outputs\n\nThe **_Output_** payload contains the status of the charger.\n\n## Contact\n\nvia [Github](https://github.com/nikagl/50five)\n\n## Thanks\n\nThanks to dgthomson for his shell recharge script!! [Github](https://github.com/dgthomson/nodered-shellrecharge)",
         "category": "",
         "in": [
             {
                 "x": 20,
-                "y": 320,
+                "y": 380,
                 "wires": [
                     {
-                        "id": "512ddb118df0498e"
+                        "id": "ab42827aa9a16541"
                     }
                 ]
             }
@@ -19,10 +19,10 @@
         "out": [
             {
                 "x": 900,
-                "y": 820,
+                "y": 840,
                 "wires": [
                     {
-                        "id": "76753c7b60958521",
+                        "id": "ad396f2bbd1d09ee",
                         "port": 0
                     }
                 ]
@@ -57,47 +57,12 @@
                 }
             },
             {
-                "name": "deviceid",
-                "type": "num",
-                "value": "1234567890",
-                "ui": {
-                    "icon": "font-awesome/fa-plug",
-                    "label": {
-                        "en-US": "Device ID"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "num"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "userid",
-                "type": "num",
-                "value": "123456",
-                "ui": {
-                    "icon": "font-awesome/fa-child",
-                    "label": {
-                        "en-US": "User ID"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "num"
-                        ]
-                    }
-                }
-            },
-            {
-                "name": "cardid",
+                "name": "url",
                 "type": "str",
-                "value": "NL505C12345678",
+                "value": "https://50five-snl.evc-net.com",
                 "ui": {
-                    "icon": "font-awesome/fa-id-card-o",
                     "label": {
-                        "en-US": "Card ID"
+                        "en-US": "50five URL"
                     },
                     "type": "input",
                     "opts": {
@@ -106,29 +71,12 @@
                         ]
                     }
                 }
-            },
-            {
-                "name": "channelid",
-                "type": "num",
-                "value": "1",
-                "ui": {
-                    "icon": "font-awesome/fa-cc",
-                    "label": {
-                        "en-US": "Channel ID"
-                    },
-                    "type": "input",
-                    "opts": {
-                        "types": [
-                            "num"
-                        ]
-                    }
-                }
             }
         ],
         "meta": {
             "module": "50five",
             "type": "dgt.nodered.35e.shellrecharge",
-            "version": "0.0.1 (2025-07-24)",
+            "version": "0.0.3 (2025-07-27)",
             "author": "Nika Gerson Lohman <nikagl@gmail.com>",
             "desc": "Nodered subflow to control 50five charging equipment.",
             "keywords": "shell,recharge,shell recharge,new,motion,newmotion,evse,charge,50five",
@@ -138,9 +86,9 @@
         "icon": "font-awesome/fa-plug"
     },
     {
-        "id": "dea30d9836107962",
+        "id": "e4121540cef0577a",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Start Charging",
         "method": "use",
         "ret": "txt",
@@ -154,20 +102,20 @@
         "senderr": false,
         "headers": [],
         "x": 620,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
-                "5168632a92864628",
-                "0a6fd6320caefacd"
+                "1ef4895ee617902f",
+                "e212968823cdeec7"
             ]
         ]
     },
     {
-        "id": "9f483c9d74c482ee",
+        "id": "166efce0dcca4c03",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Start Charging",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StartTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%2C%22customer%22%3A%22' + userid + '%22%2C%22card%22%3A%22' + cardid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StartTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%220%22%2C%22customer%22%3A%22' + userid + '%22%2C%22card%22%3A%22' + cardid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -175,17 +123,17 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
-                "dea30d9836107962"
+                "e4121540cef0577a"
             ]
         ]
     },
     {
-        "id": "b07a5bdbd77e1ba6",
+        "id": "37207b0ef9a04622",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Set Cookies Header",
         "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
@@ -195,17 +143,17 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "4406fbdfa52d73aa"
+                "5543a7f6021292f4"
             ]
         ]
     },
     {
-        "id": "523b41476b60f399",
+        "id": "523e092ea25df902",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get Device ID",
         "method": "use",
         "ret": "txt",
@@ -219,17 +167,17 @@
         "senderr": false,
         "headers": [],
         "x": 820,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "345cf7bb6ddbf954"
+                "026400c8cc57db02"
             ]
         ]
     },
     {
-        "id": "d5856c0b80fac5db",
+        "id": "cd627a81c8fd2344",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Set Cookies Header",
         "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
@@ -239,17 +187,17 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
-                "ef05409274d1d043"
+                "eefc7e230b8abd86"
             ]
         ]
     },
     {
-        "id": "07081e47e4daa227",
+        "id": "96df4155ded7d3b5",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get Channel ID",
         "method": "use",
         "ret": "txt",
@@ -263,17 +211,17 @@
         "senderr": false,
         "headers": [],
         "x": 820,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
-                "951d78944e6dc44d"
+                "9e8ce09005a03634"
             ]
         ]
     },
     {
-        "id": "5915399cc96c04f9",
+        "id": "cc31ceaa6768b237",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Set Cookies Header",
         "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
@@ -283,17 +231,17 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
-                "84d26344abcda97e"
+                "76f26faaa6b12c25"
             ]
         ]
     },
     {
-        "id": "8c42a7e4b5d4cf9a",
+        "id": "34a5d41c70f5ed7f",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get User ID",
         "method": "use",
         "ret": "txt",
@@ -307,17 +255,17 @@
         "senderr": false,
         "headers": [],
         "x": 810,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
-                "b0b4b1bf863ece14"
+                "2c39c72f658cb7dd"
             ]
         ]
     },
     {
-        "id": "59f6c2b21b1e45b2",
+        "id": "dd6f3222e79bcba5",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Set Cookies Header",
         "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
@@ -327,17 +275,17 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "d674776649886c8b"
+                "c508ecef01e019d7"
             ]
         ]
     },
     {
-        "id": "b47fe5cb002dd1a5",
+        "id": "52dc6d748d6d338d",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get Card ID",
         "method": "use",
         "ret": "txt",
@@ -351,17 +299,17 @@
         "senderr": false,
         "headers": [],
         "x": 810,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "91ae799d0660b2dc"
+                "4c4d4bd16599e018"
             ]
         ]
     },
     {
-        "id": "b40722cc0217295f",
+        "id": "1dbd3ab606fed438",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Set Cookies Header",
         "func": "// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID');\nvar serverid = flow.get('SERVERID');\nif (phpsessid && serverid) {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = `PHPSESSID=${phpsessid}; SERVERID=${serverid}`;\n} else {\n    msg.headers = msg.headers || {};\n    msg.headers['Cookie'] = '';\n}\nreturn msg;",
         "outputs": 1,
@@ -371,17 +319,18 @@
         "finalize": "",
         "libs": [],
         "x": 360,
-        "y": 600,
+        "y": 620,
         "wires": [
             [
-                "575aea9516f7c905"
+                "fda03362ccda5b6d",
+                "e095d5d4bde9b040"
             ]
         ]
     },
     {
-        "id": "a4347add53151e88",
+        "id": "f88bdcf8eaa8e2ce",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Stop Charging",
         "method": "use",
         "ret": "txt",
@@ -395,18 +344,18 @@
         "senderr": false,
         "headers": [],
         "x": 620,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
-                "5168632a92864628",
-                "0a6fd6320caefacd"
+                "1ef4895ee617902f",
+                "651b0c71fc1625b4"
             ]
         ]
     },
     {
-        "id": "345cf7bb6ddbf954",
+        "id": "026400c8cc57db02",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Extract Device ID",
         "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar deviceid = payload[0][0].IDX;\n\nflow.set('deviceid', deviceid);\nmsg.deviceid = deviceid;\n\nreturn msg;",
         "outputs": 1,
@@ -416,18 +365,17 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "5168632a92864628",
-                "d5856c0b80fac5db"
+                "cd627a81c8fd2344"
             ]
         ]
     },
     {
-        "id": "951d78944e6dc44d",
+        "id": "9e8ce09005a03634",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Extract Channel ID",
         "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar channelid = payload[0][0].CHANNEL;\n\nflow.set('channelid', channelid);\nmsg.channelid = channelid;\n\nreturn msg;",
         "outputs": 1,
@@ -437,18 +385,17 @@
         "finalize": "",
         "libs": [],
         "x": 1010,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
-                "5915399cc96c04f9",
-                "5168632a92864628"
+                "cc31ceaa6768b237"
             ]
         ]
     },
     {
-        "id": "b0b4b1bf863ece14",
+        "id": "2c39c72f658cb7dd",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Extract User ID",
         "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar userid = payload[0][0].id;\n\nflow.set('userid', userid);\nmsg.userid = userid;\n\nreturn msg;",
         "outputs": 1,
@@ -458,18 +405,17 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
-                "59f6c2b21b1e45b2",
-                "5168632a92864628"
+                "dd6f3222e79bcba5"
             ]
         ]
     },
     {
-        "id": "91ae799d0660b2dc",
+        "id": "4c4d4bd16599e018",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Extract Card ID",
         "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\n// Warning: in my case it's the second card, therefore [1]\nvar cardid = payload[0][1].id;\n\nflow.set('cardid', cardid);\nmsg.cardid = cardid;\n\nreturn msg;",
         "outputs": 1,
@@ -479,20 +425,19 @@
         "finalize": "",
         "libs": [],
         "x": 1000,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "b40722cc0217295f",
-                "5168632a92864628"
+                "1dbd3ab606fed438"
             ]
         ]
     },
     {
-        "id": "5c84401b008dc81a",
+        "id": "3af2fbca19137838",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Stop Charging",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StopTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%22' + channelid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22StopTransaction%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A0%2C%22channel%22%3A%22' + channelid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -500,55 +445,50 @@
         "finalize": "",
         "libs": [],
         "x": 410,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
-                "a4347add53151e88"
+                "f88bdcf8eaa8e2ce"
             ]
         ]
     },
     {
-        "id": "4406fbdfa52d73aa",
+        "id": "5543a7f6021292f4",
         "type": "switch",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Check login",
         "property": "headers['Cookie']",
         "propertyType": "msg",
         "rules": [
             {
-                "t": "null"
+                "t": "eq",
+                "v": "",
+                "vt": "str"
             },
             {
-                "t": "empty"
-            },
-            {
-                "t": "nnull"
+                "t": "neq",
+                "v": "",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 3,
+        "outputs": 2,
         "x": 490,
-        "y": 380,
+        "y": 400,
         "wires": [
             [
-                "374c7ce6aaafe95b",
-                "5168632a92864628"
+                "eeb3b3d597f17754"
             ],
             [
-                "374c7ce6aaafe95b",
-                "5168632a92864628"
-            ],
-            [
-                "5168632a92864628",
-                "d459327c74fc9eb8"
+                "48bd18c4860183ee"
             ]
         ]
     },
     {
-        "id": "512ddb118df0498e",
+        "id": "ab42827aa9a16541",
         "type": "switch",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "property": "50five.action",
         "propertyType": "msg",
@@ -577,82 +517,89 @@
                 "t": "eq",
                 "v": "poll",
                 "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "logout",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 5,
+        "outputs": 6,
         "x": 65,
-        "y": 320,
+        "y": 380,
         "wires": [
             [
-                "374c7ce6aaafe95b"
+                "eeb3b3d597f17754"
             ],
             [
-                "48b2e1616e463611"
+                "99521c93e3a047aa"
             ],
             [
-                "fa5f77cd0f8102ba"
+                "ef08cbdc1a8a6edc"
             ],
             [
-                "3b70c141ce8cc80f"
+                "dadaca9b339cf366"
             ],
             [
-                "51523047f9335623"
+                "14976606d8bc1752"
+            ],
+            [
+                "64520b122fb39861"
             ]
         ],
         "l": false
     },
     {
-        "id": "fbd90f3aed62cd03",
+        "id": "829677e378046f06",
         "type": "link in",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Authenticate",
         "links": [],
-        "x": 405,
+        "x": 605,
         "y": 20,
         "wires": [
             [
-                "4a35fc433416383e",
-                "5168632a92864628"
+                "e745a599c9efa2a4",
+                "de872fa17c1846e7"
             ]
         ]
     },
     {
-        "id": "e35240edb3f26485",
+        "id": "2ca402a99de11343",
         "type": "comment",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Authenticate",
         "info": "",
-        "x": 310,
+        "x": 510,
         "y": 20,
         "wires": []
     },
     {
-        "id": "6efad923fe8b4e5f",
+        "id": "d66c62a69d3727d4",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Login with Retry",
-        "func": "var retries = msg.max_retries || 3;\nvar attempt = msg.attempt || 1;\n\nlet username = msg.username || env.get(\"LOGIN_USERNAME\") || flow.get(\"LOGIN_USERNAME\") || \"USERNAME\";\nlet password = msg.password || env.get(\"LOGIN_PASSWORD\") || flow.get(\"LOGIN_PASSWORD\") || \"PASSWORD\";\n\nmsg.url = 'https://50five-snl.evc-net.com/Login/Login';\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Login/Login\"\n};\nmsg.method = \"POST\";\nmsg.payload = `emailField=${encodeURIComponent(username)}`;\nmsg.payload += `&passwordField=${encodeURIComponent(password)}`;\nmsg.attempt = attempt;\n\nreturn msg;",
+        "func": "var retries = msg.max_retries || 3;\nvar attempt = msg.attempt || 1;\n\nlet username = msg.username || env.get('username');\nlet password = msg.password || env.get('password');\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/Login/Login';\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": baseUrl + '/Login/Login'\n};\nmsg.method = \"POST\";\nmsg.payload = `emailField=${encodeURIComponent(username)}`;\nmsg.payload += `&passwordField=${encodeURIComponent(password)}`;\nmsg.attempt = attempt;\n\nreturn msg;",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 320,
+        "x": 520,
         "y": 100,
         "wires": [
             [
-                "f6763d53afe53508",
-                "5168632a92864628"
+                "f3fcb42d4b45a567"
             ]
         ]
     },
     {
-        "id": "f6763d53afe53508",
+        "id": "f3fcb42d4b45a567",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "POST Login",
         "method": "use",
         "ret": "txt",
@@ -665,43 +612,43 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 310,
+        "x": 510,
         "y": 140,
         "wires": [
             [
-                "104b8a03759c9970",
-                "5168632a92864628"
+                "bb7ed68adecb2ca3"
             ]
         ]
     },
     {
-        "id": "104b8a03759c9970",
+        "id": "bb7ed68adecb2ca3",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Check Login Success",
-        "func": "// Check for login success by inspecting HTML\nvar cookies = msg.responseCookies || {};\nvar phpsessid = cookies.PHPSESSID ? cookies.PHPSESSID.value : null;\nvar serverid = cookies.SERVERID ? cookies.SERVERID.value : null;\nvar html = msg.payload || '';\n\nmsg.attempt += 1;\nif (html.indexOf('signed-out') === -1 && phpsessid && serverid) {\n    // Success: store cookies\n    flow.set('PHPSESSID', phpsessid);\n    flow.set('SERVERID', serverid);\n    msg.payload = 'Login successful';\n    return [msg, null];\n} else if (msg.attempt < msg.retries) {\n    // Retry\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.retries + ' attempts';\n    return [msg, null];\n}\n",
+        "func": "// Check for login success by inspecting HTML\nvar cookies = msg.responseCookies || {};\nvar phpsessid = cookies.PHPSESSID ? cookies.PHPSESSID.value : null;\nvar serverid = cookies.SERVERID ? cookies.SERVERID.value : null;\nvar html = msg.payload || '';\n\nmsg.attempt += 1;\n\n// extract dlv_session_user_type and dlv_user_group_name from the results\nvar regex = /_mtm\\.push\\(\\s*{([\\s\\S]*?)}\\s*\\);/g;\nvar match;\nvar found = false;\n\nwhile ((match = regex.exec(html)) !== null) {\n    var objStr = '{' + match[1] + '}';\n    objStr = objStr.replace(/'/g, '\"');\n    objStr = objStr.replace(/,(\\s*[}\\]])/g, '$1');\n    try {\n        var obj = JSON.parse(objStr);\n        if (obj.dlv_session_user_type && obj.dlv_user_group_name) {\n            msg.dlv_session_user_type = obj.dlv_session_user_type;\n            msg.dlv_user_group_name = obj.dlv_user_group_name;\n            found = true;\n            break;\n        }\n    } catch (e) {\n        // Ignore parse errors and continue\n    }\n}\nif (!found) {\n    msg.dlv_session_user_type = null;\n    msg.dlv_user_group_name = null;\n}\n\nif (msg.dlv_session_user_type != 'NotLoggedIn') {\n    if (phpsessid && serverid) {\n        // Success: store cookies\n        flow.set('PHPSESSID', phpsessid);\n        flow.set('SERVERID', serverid);\n        msg.payload = 'Login successful';\n        return [msg, null];\n    } else {\n        msg.errorresult = 'No phpsessid or serverid';\n    }\n} else {\n    msg.errorresult = 'Not Logged In found...';\n}\n\nif (msg.attempt < msg.retries) {\n    // Retry\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.retries + ' attempts';\n    return [msg, null];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 340,
+        "x": 540,
         "y": 180,
         "wires": [
             [
-                "81891e9a5efbcf8b",
-                "5168632a92864628"
+                "670f138e65b086f0",
+                "464a08a7930a8b25"
             ],
             [
-                "b145d5db72fa677a"
+                "055fefc47e2a9965",
+                "0deedfe07fbaeab4"
             ]
         ]
     },
     {
-        "id": "b145d5db72fa677a",
+        "id": "055fefc47e2a9965",
         "type": "delay",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "pauseType": "delay",
         "timeout": "1",
@@ -715,18 +662,18 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 100,
+        "x": 300,
         "y": 180,
         "wires": [
             [
-                "6efad923fe8b4e5f"
+                "d66c62a69d3727d4"
             ]
         ]
     },
     {
-        "id": "4a35fc433416383e",
+        "id": "e745a599c9efa2a4",
         "type": "change",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get Username and Password + Max Retries",
         "rules": [
             {
@@ -756,137 +703,119 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 410,
+        "x": 610,
         "y": 60,
         "wires": [
             [
-                "6efad923fe8b4e5f",
-                "5168632a92864628"
+                "d66c62a69d3727d4"
             ]
         ]
     },
     {
-        "id": "fa5f77cd0f8102ba",
+        "id": "ef08cbdc1a8a6edc",
         "type": "link call",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [
-            "1f53bf1285478acf"
+            "76f654c7b3feadba"
         ],
         "linkType": "static",
         "timeout": "30",
         "x": 220,
-        "y": 700,
+        "y": 720,
         "wires": [
             [
-                "5c84401b008dc81a"
+                "3af2fbca19137838"
             ]
         ]
     },
     {
-        "id": "1f53bf1285478acf",
+        "id": "76f654c7b3feadba",
         "type": "link in",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [],
         "x": 175,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "b07a5bdbd77e1ba6"
+                "37207b0ef9a04622",
+                "893bf7714f019f15"
             ]
         ]
     },
     {
-        "id": "48b2e1616e463611",
+        "id": "99521c93e3a047aa",
         "type": "link call",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [
-            "1f53bf1285478acf"
+            "76f654c7b3feadba"
         ],
         "linkType": "static",
         "timeout": "30",
         "x": 220,
-        "y": 660,
+        "y": 680,
         "wires": [
             [
-                "9f483c9d74c482ee"
+                "166efce0dcca4c03"
             ]
         ]
     },
     {
-        "id": "95d2381bb791e588",
+        "id": "0fa54e940c405816",
         "type": "comment",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "info": "",
         "x": 220,
-        "y": 400,
+        "y": 420,
         "wires": []
     },
     {
-        "id": "5168632a92864628",
-        "type": "debug",
-        "z": "632f0e246544e623",
-        "d": true,
-        "name": "debug",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1070,
-        "y": 20,
-        "wires": []
-    },
-    {
-        "id": "575aea9516f7c905",
+        "id": "fda03362ccda5b6d",
         "type": "link out",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "link out 1",
         "mode": "return",
         "links": [],
         "x": 495,
-        "y": 600,
+        "y": 620,
         "wires": []
     },
     {
-        "id": "81891e9a5efbcf8b",
+        "id": "670f138e65b086f0",
         "type": "link out",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 495,
+        "x": 695,
         "y": 160,
         "wires": []
     },
     {
-        "id": "374c7ce6aaafe95b",
+        "id": "eeb3b3d597f17754",
         "type": "link call",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "links": [
-            "fbd90f3aed62cd03"
+            "829677e378046f06"
         ],
         "linkType": "static",
         "timeout": "30",
         "x": 430,
-        "y": 280,
+        "y": 340,
         "wires": [
             [
-                "63715bc4396373f6"
+                "c9278b4cb8e5f69c"
             ]
         ]
     },
     {
-        "id": "63715bc4396373f6",
+        "id": "c9278b4cb8e5f69c",
         "type": "switch",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "property": "50five.action",
         "propertyType": "msg",
@@ -906,21 +835,21 @@
         "repair": false,
         "outputs": 2,
         "x": 535,
-        "y": 280,
+        "y": 340,
         "wires": [
             [
-                "5168632a92864628"
+                "36fbafc84636541a"
             ],
             [
-                "8e146feb37bbe30c"
+                "89a8ce5f7b440922"
             ]
         ],
         "l": false
     },
     {
-        "id": "8e146feb37bbe30c",
+        "id": "89a8ce5f7b440922",
         "type": "switch",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "property": "payload",
         "propertyType": "msg",
@@ -940,22 +869,24 @@
         "repair": false,
         "outputs": 2,
         "x": 605,
-        "y": 280,
+        "y": 340,
         "wires": [
             [
-                "d8305ae62822d258"
+                "aaad9fdb0931a81b"
             ],
             [
-                "4406fbdfa52d73aa"
+                "5543a7f6021292f4",
+                "dd94143ffd519d96"
             ]
         ],
         "l": false
     },
     {
-        "id": "d8305ae62822d258",
+        "id": "aaad9fdb0931a81b",
         "type": "debug",
-        "z": "632f0e246544e623",
-        "name": "ERROR",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Login Failed",
         "active": true,
         "tosidebar": true,
         "console": false,
@@ -964,14 +895,14 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1060,
-        "y": 60,
+        "x": 750,
+        "y": 320,
         "wires": []
     },
     {
-        "id": "9159bc8f8fe59ddd",
+        "id": "5f3853c9602fa364",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Soft Reset",
         "method": "use",
         "ret": "txt",
@@ -985,20 +916,20 @@
         "senderr": false,
         "headers": [],
         "x": 610,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "5168632a92864628",
-                "0a6fd6320caefacd"
+                "1ef4895ee617902f",
+                "8fa98544d309b480"
             ]
         ]
     },
     {
-        "id": "98dc9c902aa40d0a",
+        "id": "648ab0e8980ef93f",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Soft Reset",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22SoftReset%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A1%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22action%22%2C%22params%22%3A%7B%22action%22%3A%22SoftReset%22%2C%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22clickedButtonId%22%3A1%7D%7D%7D&metricKey=RechargeSpotDashboard_1021';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1006,35 +937,35 @@
         "finalize": "",
         "libs": [],
         "x": 400,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "9159bc8f8fe59ddd"
+                "5f3853c9602fa364"
             ]
         ]
     },
     {
-        "id": "3b70c141ce8cc80f",
+        "id": "dadaca9b339cf366",
         "type": "link call",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [
-            "1f53bf1285478acf"
+            "76f654c7b3feadba"
         ],
         "linkType": "static",
         "timeout": "30",
         "x": 220,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "98dc9c902aa40d0a"
+                "648ab0e8980ef93f"
             ]
         ]
     },
     {
-        "id": "3a309e1c760e55df",
+        "id": "a82901d77cef174c",
         "type": "http request",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get Status",
         "method": "use",
         "ret": "txt",
@@ -1048,20 +979,19 @@
         "senderr": false,
         "headers": [],
         "x": 610,
-        "y": 820,
+        "y": 840,
         "wires": [
             [
-                "5168632a92864628",
-                "76753c7b60958521"
+                "ad396f2bbd1d09ee"
             ]
         ]
     },
     {
-        "id": "93554278bdc8a3bc",
+        "id": "01f05d815d3301eb",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Get Status",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1069,35 +999,35 @@
         "finalize": "",
         "libs": [],
         "x": 400,
-        "y": 820,
+        "y": 840,
         "wires": [
             [
-                "3a309e1c760e55df"
+                "a82901d77cef174c"
             ]
         ]
     },
     {
-        "id": "51523047f9335623",
+        "id": "14976606d8bc1752",
         "type": "link call",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [
-            "1f53bf1285478acf"
+            "76f654c7b3feadba"
         ],
         "linkType": "static",
         "timeout": "30",
         "x": 220,
-        "y": 820,
+        "y": 840,
         "wires": [
             [
-                "93554278bdc8a3bc"
+                "01f05d815d3301eb"
             ]
         ]
     },
     {
-        "id": "76753c7b60958521",
+        "id": "ad396f2bbd1d09ee",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Extract Status",
         "func": "var payload = msg.payload;\n\n// If payload is a string, parse it\nif (typeof payload === \"string\") {\n    payload = JSON.parse(payload);\n}\n\nvar status = payload[0][0].NOTIFICATION;\nmsg.status = status;\n\nreturn msg;",
         "outputs": 1,
@@ -1107,15 +1037,17 @@
         "finalize": "",
         "libs": [],
         "x": 780,
-        "y": 820,
+        "y": 840,
         "wires": [
-            []
+            [
+                "d149e3c954175a26"
+            ]
         ]
     },
     {
-        "id": "0a6fd6320caefacd",
+        "id": "1ef4895ee617902f",
         "type": "delay",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "",
         "pauseType": "delay",
         "timeout": "7",
@@ -1130,19 +1062,19 @@
         "allowrate": false,
         "outputs": 1,
         "x": 840,
-        "y": 740,
+        "y": 760,
         "wires": [
             [
-                "51523047f9335623"
+                "14976606d8bc1752"
             ]
         ]
     },
     {
-        "id": "d459327c74fc9eb8",
+        "id": "48bd18c4860183ee",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Device ID",
-        "func": "msg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D&metricKey=EndUserRechargeSpotListView_99';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CDashboardAsyncService%22%2C%22method%22%3A%22networkOverview%22%2C%22params%22%3A%7B%22mode%22%3A%22id%22%7D%7D%7D&metricKey=EndUserRechargeSpotListView_99';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1150,19 +1082,19 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 440,
+        "y": 460,
         "wires": [
             [
-                "523b41476b60f399"
+                "523e092ea25df902"
             ]
         ]
     },
     {
-        "id": "ef05409274d1d043",
+        "id": "eefc7e230b8abd86",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Channel ID",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22overview%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_149';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1170,19 +1102,19 @@
         "finalize": "",
         "libs": [],
         "x": 620,
-        "y": 480,
+        "y": 500,
         "wires": [
             [
-                "07081e47e4daa227"
+                "96df4155ded7d3b5"
             ]
         ]
     },
     {
-        "id": "84d26344abcda97e",
+        "id": "76f26faaa6b12c25",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL User ID",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22input%22%3A%22%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22userAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22input%22%3A%22%22%7D%7D%7D&metricKey=RechargeSpotDashboard_642';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1190,19 +1122,19 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 520,
+        "y": 540,
         "wires": [
             [
-                "8c42a7e4b5d4cf9a"
+                "34a5d41c70f5ed7f"
             ]
         ]
     },
     {
-        "id": "d674776649886c8b",
+        "id": "c508ecef01e019d7",
         "type": "function",
-        "z": "632f0e246544e623",
+        "z": "afe326f672e3cd97",
         "name": "Build URL Card ID",
-        "func": "var deviceid = flow.get('deviceid');\nvar userid = flow.get('userid');\nvar cardid = flow.get('cardid');\nvar channelid = flow.get('channelid');\n\nmsg.url = 'https://50five-snl.evc-net.com/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22customerId%22%3A%22' + userid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688';\nmsg.method = \"POST\";\n\nreturn msg;",
+        "func": "var deviceid = flow.get('deviceid') || msg.deviceid;\nvar userid = flow.get('userid') || msg.userid;\nvar cardid = flow.get('cardid') || msg.cardid;\nvar channelid = flow.get('channelid') || msg.channelid;\n\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/api/ajax?requests=%7B%220%22%3A%7B%22handler%22%3A%22%5C%5CLMS%5C%5CEV%5C%5CAsyncServices%5C%5CRechargeSpotsAsyncService%22%2C%22method%22%3A%22cardAccess%22%2C%22params%22%3A%7B%22rechargeSpotId%22%3A%22' + deviceid + '%22%2C%22customerId%22%3A%22' + userid + '%22%7D%7D%7D&metricKey=RechargeSpotDashboard_688';\nmsg.method = \"POST\";\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1210,15 +1142,251 @@
         "finalize": "",
         "libs": [],
         "x": 610,
-        "y": 560,
+        "y": 580,
         "wires": [
             [
-                "b47fe5cb002dd1a5"
+                "52dc6d748d6d338d"
             ]
         ]
     },
     {
-        "id": "837fdef5c775d406",
+        "id": "64520b122fb39861",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Logout",
+        "func": "flow.set('PHPSESSID', '');\nflow.set('SERVERID', '');\n\nmsg.payload = \"Done...\";\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 210,
+        "y": 920,
+        "wires": [
+            [
+                "48d5a61c52da6f54"
+            ]
+        ]
+    },
+    {
+        "id": "48d5a61c52da6f54",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Logged out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 360,
+        "y": 920,
+        "wires": []
+    },
+    {
+        "id": "de872fa17c1846e7",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Auth Begin",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "464a08a7930a8b25",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Auth Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "0deedfe07fbaeab4",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Auth Retry",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 750,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "893bf7714f019f15",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Props Begin",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 230,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e095d5d4bde9b040",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Props Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "dd94143ffd519d96",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Login Success",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "36fbafc84636541a",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Manual Login",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "e212968823cdeec7",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Charging Started",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "651b0c71fc1625b4",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Charging Stopped",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1030,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "8fa98544d309b480",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Reset Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1050,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "d149e3c954175a26",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Status Received",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1040,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7801bca7eb84dbaf",
         "type": "tab",
         "label": "50five",
         "disabled": false,
@@ -1226,48 +1394,9 @@
         "env": []
     },
     {
-        "id": "e8f8257ca9ba7d13",
-        "type": "subflow:632f0e246544e623",
-        "z": "837fdef5c775d406",
-        "name": "50five",
-        "env": [
-            {
-                "name": "username",
-                "value": "username@gmail.com",
-                "type": "str"
-            },
-            {
-                "name": "password",
-                "type": "cred"
-            },
-            {
-                "name": "deviceid",
-                "value": "1234567890",
-                "type": "num"
-            },
-            {
-                "name": "userid",
-                "value": "123456",
-                "type": "num"
-            },
-            {
-                "name": "cardid",
-                "value": "NL505C12345678",
-                "type": "str"
-            }
-        ],
-        "x": 590,
-        "y": 240,
-        "wires": [
-            [
-                "abacac7dac80f615"
-            ]
-        ]
-    },
-    {
-        "id": "3bb2400b473a86ba",
+        "id": "87718d84e1c7eec3",
         "type": "ha-switch",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Laden",
         "version": 0,
         "debugenabled": false,
@@ -1285,20 +1414,20 @@
             }
         ],
         "x": 90,
-        "y": 520,
+        "y": 580,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ],
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "521a7eee4b8dd278",
+        "id": "649b5c633afde8ec",
         "type": "ha-button",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Reset",
         "version": 0,
         "debugenabled": false,
@@ -1313,17 +1442,17 @@
             }
         ],
         "x": 90,
-        "y": 440,
+        "y": 700,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "8a9442817a889cd3",
+        "id": "a92a6a6663803fdf",
         "type": "ha-button",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Poll",
         "version": 0,
         "debugenabled": false,
@@ -1338,17 +1467,17 @@
             }
         ],
         "x": 90,
-        "y": 340,
+        "y": 520,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "abacac7dac80f615",
+        "id": "b288b09dcea610fd",
         "type": "ha-sensor",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Laadpaal Status",
         "entityConfig": "7eca8bfdf57ade1d",
         "version": 0,
@@ -1364,10 +1493,10 @@
         ]
     },
     {
-        "id": "96511b305dbbd363",
+        "id": "fb419651251e9150",
         "type": "inject",
-        "z": "837fdef5c775d406",
-        "name": "Start Login",
+        "z": "7801bca7eb84dbaf",
+        "name": "Login",
         "props": [
             {
                 "p": "50five.action",
@@ -1380,18 +1509,18 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 380,
+        "x": 370,
         "y": 40,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "122a555f7dd485b7",
+        "id": "c1e482c447619238",
         "type": "inject",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Start Charging",
         "props": [
             {
@@ -1406,17 +1535,17 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 100,
+        "y": 240,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "fab9bbf22045480f",
+        "id": "0e68820a56fb8fc9",
         "type": "inject",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Stop Charging",
         "props": [
             {
@@ -1431,17 +1560,17 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 110,
-        "y": 200,
+        "y": 360,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "51d75f2e75830db1",
+        "id": "3000534bd18e927c",
         "type": "ha-button",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Start",
         "version": 0,
         "debugenabled": false,
@@ -1456,17 +1585,17 @@
             }
         ],
         "x": 90,
-        "y": 140,
+        "y": 280,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "41ec569de744ad57",
+        "id": "f6064af97d0431f4",
         "type": "ha-button",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Stop",
         "version": 0,
         "debugenabled": false,
@@ -1481,17 +1610,17 @@
             }
         ],
         "x": 90,
-        "y": 240,
+        "y": 400,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "00171015139a8670",
+        "id": "90a2401d152fa35f",
         "type": "inject",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Poll",
         "props": [
             {
@@ -1506,17 +1635,17 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 90,
-        "y": 300,
+        "y": 480,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
             ]
         ]
     },
     {
-        "id": "dc15fa7591ef6252",
+        "id": "a3770db499d96007",
         "type": "inject",
-        "z": "837fdef5c775d406",
+        "z": "7801bca7eb84dbaf",
         "name": "Reset",
         "props": [
             {
@@ -1531,10 +1660,160 @@
         "onceDelay": 0.1,
         "topic": "",
         "x": 90,
-        "y": 400,
+        "y": 660,
         "wires": [
             [
-                "e8f8257ca9ba7d13"
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "f697e22eb9f3d098",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Logout",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "logout",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 370,
+        "y": 80,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "6ac6eea04cf98b95",
+        "type": "mqtt out",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Output",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "91e30fc5ccf91f78",
+        "x": 960,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6dab1089e1b0cb2d",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "50five/status",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "status",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 180,
+        "wires": [
+            [
+                "6ac6eea04cf98b95"
+            ]
+        ]
+    },
+    {
+        "id": "382121f46e1842a5",
+        "type": "mqtt in",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Action",
+        "topic": "50five/action",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "91e30fc5ccf91f78",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "aae1a1a38b69351f"
+            ]
+        ]
+    },
+    {
+        "id": "aae1a1a38b69351f",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "fccfd7e373f2a50f",
+        "type": "subflow:afe326f672e3cd97",
+        "z": "7801bca7eb84dbaf",
+        "name": "50five (subflow)",
+        "env": [
+            {
+                "name": "username",
+                "value": "nobody@gmail.com",
+                "type": "str"
+            },
+            {
+                "name": "password",
+                "type": "cred"
+            }
+        ],
+        "x": 580,
+        "y": 240,
+        "wires": [
+            [
+                "b288b09dcea610fd",
+                "6dab1089e1b0cb2d"
             ]
         ]
     },
@@ -1743,6 +2022,37 @@
         ],
         "resend": false,
         "debugEnabled": false
+    },
+    {
+        "id": "91e30fc5ccf91f78",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "core-mosquitto",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
     },
     {
         "id": "6b7ca337.48e8fc",
