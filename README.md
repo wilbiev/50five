@@ -16,6 +16,18 @@ Current flow supports:
 * Use MQTT to receive status
 * Creates home assistant buttons & switch for start/stop/polling/reset
 
+In the "Extract Card ID" function node you may need to replace this depending on the card you'd like to use:
+
+```
+var cardid = payload[0][1].id;
+````
+
+change this to the following if you would like to use the first card:
+
+```
+var cardid = payload[0][0].id;
+````
+
 _50five.postman_collection.json_
 
 This is my (anonimized) json collection. API connection doesn't work but the others do...
