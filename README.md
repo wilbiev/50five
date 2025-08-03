@@ -1,20 +1,32 @@
 _50five.json_
 
-This is the Node Red flow
+This is the Node Red flow for 50five charging station.
 
 * Import the file into Node Red
-* Add environment variables in Settings > Environment:
-  * LOGIN_USERNAME
-  * LOGIN_PASSWORD
-  <img width="268" height="550" alt="image" src="https://github.com/user-attachments/assets/d93fde43-ba1e-4561-8c05-14fb0fb1b61c" />
-  <img width="710" height="332" alt="image" src="https://github.com/user-attachments/assets/21f6aa6c-56b9-4469-8d6f-2fa6f8d02417" />
+* Change the URL, username and password on the subflow
 * Publish the flow
 
-Current version only logs in and gets some basic information, nothing fancy yet...
+Current flow supports:
+* Login
+* Start/Stop charging
+* Poll status
+* Reset (softreset, not sure yet what the difference between hard- and softreset is)
+* Logout
+* Use MQTT to send actions
+* Use MQTT to receive status
+* Creates home assistant buttons & switch for start/stop/polling/reset
 
-<img width="1462" height="931" alt="image" src="https://github.com/user-attachments/assets/b8f57480-cd44-4af4-a0c5-a82b2453e18e" /><br>
+In the "Extract Card ID" function node you may need to replace this depending on the card you'd like to use:
 
+```
+var cardid = payload[0][1].id;
+````
 
+change this to the following if you would like to use the first card:
+
+```
+var cardid = payload[0][0].id;
+````
 
 _50five.postman_collection.json_
 
