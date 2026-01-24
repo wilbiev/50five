@@ -1,3 +1,11 @@
+WARNING: 
+
+I have stopped development for this myself as I have moved to https://github.com/Platzii/homeassistant-evcnet which does not require these flows and node-red anymore... So I cannot test anything and I would recommend forking this repo to someone that can still continue development that includes testing the changes...
+
+Regards,
+
+Nika.
+
 _50five.json_
 
 This is the Node Red flow for 50five charging station.
