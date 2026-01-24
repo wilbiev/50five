@@ -7,8 +7,8 @@
         "category": "",
         "in": [
             {
-                "x": 20,
-                "y": 380,
+                "x": 40,
+                "y": 460,
                 "wires": [
                     {
                         "id": "ab42827aa9a16541"
@@ -18,8 +18,8 @@
         ],
         "out": [
             {
-                "x": 900,
-                "y": 840,
+                "x": 920,
+                "y": 920,
                 "wires": [
                     {
                         "id": "ad396f2bbd1d09ee",
@@ -32,7 +32,7 @@
             {
                 "name": "username",
                 "type": "str",
-                "value": "wilbert.van.vilsteren@achmea.nl",
+                "value": "<YOUR_USERNAME>",
                 "ui": {
                     "icon": "font-awesome/fa-user-circle-o",
                     "label": {
@@ -49,6 +49,7 @@
             {
                 "name": "password",
                 "type": "cred",
+                "value": "<YOUR_PASSWORD>",
                 "ui": {
                     "icon": "font-awesome/fa-unlock-alt",
                     "label": {
@@ -101,8 +102,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 620,
-        "y": 680,
+        "x": 640,
+        "y": 760,
         "wires": [
             [
                 "1ef4895ee617902f",
@@ -122,8 +123,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
-        "y": 680,
+        "x": 430,
+        "y": 760,
         "wires": [
             [
                 "e4121540cef0577a"
@@ -142,8 +143,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 460,
+        "x": 380,
+        "y": 540,
         "wires": [
             [
                 "5543a7f6021292f4"
@@ -166,8 +167,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 820,
-        "y": 460,
+        "x": 840,
+        "y": 540,
         "wires": [
             [
                 "c2211e7d9f57648c"
@@ -186,8 +187,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 500,
+        "x": 380,
+        "y": 580,
         "wires": [
             [
                 "eefc7e230b8abd86"
@@ -210,8 +211,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 820,
-        "y": 500,
+        "x": 840,
+        "y": 580,
         "wires": [
             [
                 "9e8ce09005a03634"
@@ -230,8 +231,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 540,
+        "x": 380,
+        "y": 620,
         "wires": [
             [
                 "76f26faaa6b12c25"
@@ -254,8 +255,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 810,
-        "y": 540,
+        "x": 830,
+        "y": 620,
         "wires": [
             [
                 "2c39c72f658cb7dd"
@@ -274,8 +275,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 580,
+        "x": 380,
+        "y": 660,
         "wires": [
             [
                 "c508ecef01e019d7"
@@ -298,8 +299,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 810,
-        "y": 580,
+        "x": 830,
+        "y": 660,
         "wires": [
             [
                 "4c4d4bd16599e018"
@@ -318,8 +319,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 360,
-        "y": 620,
+        "x": 380,
+        "y": 700,
         "wires": [
             [
                 "fda03362ccda5b6d",
@@ -343,8 +344,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 620,
-        "y": 720,
+        "x": 640,
+        "y": 800,
         "wires": [
             [
                 "1ef4895ee617902f",
@@ -364,8 +365,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1190,
-        "y": 460,
+        "x": 1210,
+        "y": 540,
         "wires": [
             [
                 "cd627a81c8fd2344"
@@ -384,8 +385,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
-        "y": 500,
+        "x": 1030,
+        "y": 580,
         "wires": [
             [
                 "cc31ceaa6768b237"
@@ -404,8 +405,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
-        "y": 540,
+        "x": 1020,
+        "y": 620,
         "wires": [
             [
                 "dd6f3222e79bcba5"
@@ -424,8 +425,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1000,
-        "y": 580,
+        "x": 1020,
+        "y": 660,
         "wires": [
             [
                 "1dbd3ab606fed438"
@@ -444,8 +445,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
-        "y": 720,
+        "x": 430,
+        "y": 800,
         "wires": [
             [
                 "f88bdcf8eaa8e2ce"
@@ -474,8 +475,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 490,
-        "y": 400,
+        "x": 510,
+        "y": 480,
         "wires": [
             [
                 "eeb3b3d597f17754"
@@ -527,8 +528,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 6,
-        "x": 65,
-        "y": 380,
+        "x": 85,
+        "y": 460,
         "wires": [
             [
                 "eeb3b3d597f17754"
@@ -557,8 +558,8 @@
         "z": "afe326f672e3cd97",
         "name": "Authenticate",
         "links": [],
-        "x": 605,
-        "y": 20,
+        "x": 515,
+        "y": 40,
         "wires": [
             [
                 "e745a599c9efa2a4",
@@ -572,78 +573,9 @@
         "z": "afe326f672e3cd97",
         "name": "Authenticate",
         "info": "",
-        "x": 510,
-        "y": 20,
+        "x": 410,
+        "y": 40,
         "wires": []
-    },
-    {
-        "id": "d66c62a69d3727d4",
-        "type": "function",
-        "z": "afe326f672e3cd97",
-        "name": "Login with Retry",
-        "func": "var retries = msg.max_retries || 3;\nvar attempt = msg.attempt || 1;\n\nlet username = msg.username || env.get('username');\nlet password = msg.password || env.get('password');\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/Login/Login';\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": baseUrl + '/Login/Login'\n};\nmsg.method = \"POST\";\nmsg.payload = `emailField=${encodeURIComponent(username)}`;\nmsg.payload += `&passwordField=${encodeURIComponent(password)}`;\nmsg.attempt = attempt;\n\nreturn msg;",
-        "outputs": 1,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 520,
-        "y": 100,
-        "wires": [
-            [
-                "f3fcb42d4b45a567"
-            ]
-        ]
-    },
-    {
-        "id": "f3fcb42d4b45a567",
-        "type": "http request",
-        "z": "afe326f672e3cd97",
-        "name": "POST Login",
-        "method": "use",
-        "ret": "txt",
-        "paytoqs": "ignore",
-        "url": "",
-        "tls": "",
-        "persist": false,
-        "proxy": "",
-        "insecureHTTPParser": false,
-        "authType": "",
-        "senderr": false,
-        "headers": [],
-        "x": 510,
-        "y": 140,
-        "wires": [
-            [
-                "bb7ed68adecb2ca3"
-            ]
-        ]
-    },
-    {
-        "id": "bb7ed68adecb2ca3",
-        "type": "function",
-        "z": "afe326f672e3cd97",
-        "name": "Check Login Success",
-        "func": "// Check for login success by inspecting HTML\nvar cookies = msg.responseCookies || {};\nvar phpsessid = cookies.PHPSESSID ? cookies.PHPSESSID.value : null;\nvar serverid = cookies.SERVERID ? cookies.SERVERID.value : null;\nvar html = msg.payload || '';\n\nmsg.attempt += 1;\n\n// extract dlv_session_user_type and dlv_user_group_name from the results\nvar regex = /_mtm\\.push\\(\\s*{([\\s\\S]*?)}\\s*\\);/g;\nvar match;\nvar found = false;\n\nwhile ((match = regex.exec(html)) !== null) {\n    var objStr = '{' + match[1] + '}';\n    objStr = objStr.replace(/'/g, '\"');\n    objStr = objStr.replace(/,(\\s*[}\\]])/g, '$1');\n    try {\n        var obj = JSON.parse(objStr);\n        if (obj.dlv_session_user_type && obj.dlv_user_group_name) {\n            msg.dlv_session_user_type = obj.dlv_session_user_type;\n            msg.dlv_user_group_name = obj.dlv_user_group_name;\n            found = true;\n            break;\n        }\n    } catch (e) {\n        // Ignore parse errors and continue\n    }\n}\nif (!found) {\n    msg.dlv_session_user_type = null;\n    msg.dlv_user_group_name = null;\n}\n\nif (msg.dlv_session_user_type != 'NotLoggedIn') {\n    if (phpsessid && serverid) {\n        // Success: store cookies\n        flow.set('PHPSESSID', phpsessid);\n        flow.set('SERVERID', serverid);\n        msg.payload = 'Login successful';\n        return [msg, null];\n    } else {\n        msg.errorresult = 'No phpsessid or serverid';\n    }\n} else {\n    msg.errorresult = 'Not Logged In found...';\n}\n\nif (msg.attempt < msg.retries) {\n    // Retry\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.retries + ' attempts';\n    return [msg, null];\n}",
-        "outputs": 2,
-        "timeout": "",
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 540,
-        "y": 180,
-        "wires": [
-            [
-                "670f138e65b086f0",
-                "464a08a7930a8b25"
-            ],
-            [
-                "055fefc47e2a9965",
-                "0deedfe07fbaeab4"
-            ]
-        ]
     },
     {
         "id": "055fefc47e2a9965",
@@ -663,10 +595,10 @@
         "allowrate": false,
         "outputs": 1,
         "x": 300,
-        "y": 180,
+        "y": 240,
         "wires": [
             [
-                "d66c62a69d3727d4"
+                "917566d1ab524bf6"
             ]
         ]
     },
@@ -695,7 +627,14 @@
                 "p": "max_retries",
                 "pt": "msg",
                 "to": "3",
-                "tot": "str"
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "attempt",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
             }
         ],
         "action": "",
@@ -703,11 +642,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 610,
-        "y": 60,
+        "x": 590,
+        "y": 80,
         "wires": [
             [
-                "d66c62a69d3727d4"
+                "917566d1ab524bf6"
             ]
         ]
     },
@@ -721,8 +660,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 220,
-        "y": 720,
+        "x": 240,
+        "y": 800,
         "wires": [
             [
                 "3af2fbca19137838"
@@ -735,8 +674,8 @@
         "z": "afe326f672e3cd97",
         "name": "Get props",
         "links": [],
-        "x": 175,
-        "y": 460,
+        "x": 195,
+        "y": 540,
         "wires": [
             [
                 "37207b0ef9a04622",
@@ -754,8 +693,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 220,
-        "y": 680,
+        "x": 240,
+        "y": 760,
         "wires": [
             [
                 "166efce0dcca4c03"
@@ -768,8 +707,8 @@
         "z": "afe326f672e3cd97",
         "name": "Get props",
         "info": "",
-        "x": 220,
-        "y": 420,
+        "x": 240,
+        "y": 500,
         "wires": []
     },
     {
@@ -779,8 +718,8 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 495,
-        "y": 620,
+        "x": 515,
+        "y": 700,
         "wires": []
     },
     {
@@ -790,8 +729,8 @@
         "name": "link out 2",
         "mode": "return",
         "links": [],
-        "x": 695,
-        "y": 160,
+        "x": 665,
+        "y": 300,
         "wires": []
     },
     {
@@ -804,8 +743,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 430,
-        "y": 340,
+        "x": 450,
+        "y": 420,
         "wires": [
             [
                 "c9278b4cb8e5f69c"
@@ -834,8 +773,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 535,
-        "y": 340,
+        "x": 555,
+        "y": 420,
         "wires": [
             [
                 "36fbafc84636541a"
@@ -868,8 +807,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 605,
-        "y": 340,
+        "x": 625,
+        "y": 420,
         "wires": [
             [
                 "aaad9fdb0931a81b"
@@ -894,8 +833,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 320,
+        "x": 770,
+        "y": 400,
         "wires": []
     },
     {
@@ -914,8 +853,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 610,
-        "y": 760,
+        "x": 630,
+        "y": 840,
         "wires": [
             [
                 "1ef4895ee617902f",
@@ -935,8 +874,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 760,
+        "x": 420,
+        "y": 840,
         "wires": [
             [
                 "5f3853c9602fa364"
@@ -953,8 +892,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 220,
-        "y": 760,
+        "x": 240,
+        "y": 840,
         "wires": [
             [
                 "648ab0e8980ef93f"
@@ -977,8 +916,8 @@
         "authType": "",
         "senderr": false,
         "headers": [],
-        "x": 610,
-        "y": 840,
+        "x": 630,
+        "y": 920,
         "wires": [
             [
                 "ad396f2bbd1d09ee"
@@ -997,8 +936,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 840,
+        "x": 420,
+        "y": 920,
         "wires": [
             [
                 "a82901d77cef174c"
@@ -1015,8 +954,8 @@
         ],
         "linkType": "static",
         "timeout": "30",
-        "x": 220,
-        "y": 840,
+        "x": 240,
+        "y": 920,
         "wires": [
             [
                 "01f05d815d3301eb"
@@ -1035,8 +974,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 780,
-        "y": 840,
+        "x": 800,
+        "y": 920,
         "wires": [
             [
                 "d149e3c954175a26"
@@ -1060,8 +999,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 840,
-        "y": 760,
+        "x": 860,
+        "y": 840,
         "wires": [
             [
                 "14976606d8bc1752"
@@ -1080,8 +1019,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 460,
+        "x": 640,
+        "y": 540,
         "wires": [
             [
                 "523e092ea25df902"
@@ -1100,8 +1039,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 620,
-        "y": 500,
+        "x": 640,
+        "y": 580,
         "wires": [
             [
                 "96df4155ded7d3b5"
@@ -1120,8 +1059,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
-        "y": 540,
+        "x": 630,
+        "y": 620,
         "wires": [
             [
                 "34a5d41c70f5ed7f"
@@ -1140,8 +1079,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 610,
-        "y": 580,
+        "x": 630,
+        "y": 660,
         "wires": [
             [
                 "52dc6d748d6d338d"
@@ -1160,8 +1099,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 210,
-        "y": 900,
+        "x": 230,
+        "y": 980,
         "wires": [
             [
                 "48d5a61c52da6f54"
@@ -1181,8 +1120,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 360,
-        "y": 900,
+        "x": 380,
+        "y": 980,
         "wires": []
     },
     {
@@ -1198,8 +1137,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 20,
+        "x": 770,
+        "y": 40,
         "wires": []
     },
     {
@@ -1215,8 +1154,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 120,
+        "x": 770,
+        "y": 220,
         "wires": []
     },
     {
@@ -1232,8 +1171,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 750,
-        "y": 200,
+        "x": 770,
+        "y": 260,
         "wires": []
     },
     {
@@ -1250,8 +1189,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 230,
-        "y": 380,
+        "x": 250,
+        "y": 460,
         "wires": []
     },
     {
@@ -1267,8 +1206,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1050,
-        "y": 620,
+        "x": 1070,
+        "y": 700,
         "wires": []
     },
     {
@@ -1284,8 +1223,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 760,
-        "y": 360,
+        "x": 780,
+        "y": 440,
         "wires": []
     },
     {
@@ -1297,12 +1236,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
+        "complete": "true",
+        "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 760,
-        "y": 280,
+        "x": 780,
+        "y": 360,
         "wires": []
     },
     {
@@ -1318,8 +1257,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1030,
-        "y": 680,
+        "x": 1050,
+        "y": 760,
         "wires": []
     },
     {
@@ -1335,8 +1274,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1030,
-        "y": 720,
+        "x": 1050,
+        "y": 800,
         "wires": []
     },
     {
@@ -1352,8 +1291,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1050,
-        "y": 760,
+        "x": 1070,
+        "y": 840,
         "wires": []
     },
     {
@@ -1369,8 +1308,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1040,
-        "y": 840,
+        "x": 1060,
+        "y": 920,
         "wires": []
     },
     {
@@ -1395,8 +1334,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 990,
-        "y": 460,
+        "x": 1010,
+        "y": 540,
         "wires": [
             [
                 "9d60367871b80759"
@@ -1418,8 +1357,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1010,
-        "y": 400,
+        "x": 1030,
+        "y": 480,
         "wires": [
             [
                 "7b18414c2fbadd7d"
@@ -1443,11 +1382,146 @@
         "bytopic": "all",
         "topic": "topic",
         "outputs": 1,
-        "x": 1180,
-        "y": 400,
+        "x": 1200,
+        "y": 480,
         "wires": [
             [
                 "eeb3b3d597f17754"
+            ]
+        ]
+    },
+    {
+        "id": "917566d1ab524bf6",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "1. GET Session",
+        "method": "GET",
+        "ret": "txt",
+        "url": "https://50five-snl.evc-net.com/Login/Login",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "60bf5c2f9f27948b"
+            ]
+        ]
+    },
+    {
+        "id": "60bf5c2f9f27948b",
+        "type": "delay",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 700,
+        "y": 120,
+        "wires": [
+            [
+                "87bb0099c2bff7c9"
+            ]
+        ]
+    },
+    {
+        "id": "87bb0099c2bff7c9",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "2. Prepare Login",
+        "func": "let username = env.get('username') || msg.username;\nlet password = env.get('password') || msg.password;\nconst boundary = 'NodeRedBoundary' + Math.random().toString(36).substring(2, 10);\n\nmsg.url = \"https://50five-snl.evc-net.com/Login/Login\"; \nmsg.method = \"POST\";\nmsg.followRedirects = false;\n\n// 1. Manually map the SERVERID (and any others) to the cookies object\nif (msg.responseCookies) {\n    msg.cookies = {};\n    for (let key in msg.responseCookies) {\n        msg.cookies[key] = msg.responseCookies[key].value;\n    }\n}\n\n// 2. Build body using concatenation to keep those $ safe\nlet body = \"--\" + boundary + \"\\r\\n\";\nbody += 'Content-Disposition: form-data; name=\"emailField\"\\r\\n\\r\\n' + username + \"\\r\\n\";\nbody += \"--\" + boundary + \"\\r\\n\";\nbody += 'Content-Disposition: form-data; name=\"passwordField\"\\r\\n\\r\\n' + password + \"\\r\\n\";\nbody += \"--\" + boundary + \"\\r\\n\";\nbody += 'Content-Disposition: form-data; name=\"Login\"\\r\\n\\r\\nAanmelden\\r\\n';\nbody += \"--\" + boundary + \"--\\r\\n\";\n\nconst payloadBuffer = Buffer.from(body, 'utf-8');\n\nmsg.headers = {\n    \"Content-Type\": \"multipart/form-data; boundary=\" + boundary,\n    \"Content-Length\": payloadBuffer.length,\n    \"Origin\": \"https://50five-snl.evc-net.com\",\n    \"Referer\": \"https://50five-snl.evc-net.com/Login/Login\",\n    \"User-Agent\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0\"\n};\n\nmsg.payload = payloadBuffer;\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 160,
+        "wires": [
+            [
+                "e26e2636964dc048"
+            ]
+        ]
+    },
+    {
+        "id": "e26e2636964dc048",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "3. POST Login",
+        "method": "use",
+        "ret": "txt",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "x": 500,
+        "y": 200,
+        "wires": [
+            [
+                "ea910e8852926fd2"
+            ]
+        ]
+    },
+    {
+        "id": "ea910e8852926fd2",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "4. Check Login Success",
+        "func": "if (msg.statusCode === 302 || msg.statusCode === 307) {\n    // Check for login success by inspecting HTML\n    var phpsessid = msg.responseCookies.PHPSESSID.value || null;\n    var serverid = msg.cookies.SERVERID || null;\n    if (phpsessid && serverid) {\n        // Success: store cookies\n        flow.set('PHPSESSID', phpsessid);\n        flow.set('SERVERID', serverid);\n        msg.payload = 'Login successful';\n        msg.cookies = {\n            \"SERVERID\": serverid,\n            \"PHPSESSID\": phpsessid\n        };\n        // Set the destination\n        msg.url = \"https://50five-snl.evc-net.com/Overview\";\n        msg.method = \"GET\";\n        return [msg, null];\n    } else {\n        msg.errorresult = 'No phpsessid or serverid';\n    }\n}\nelse {\n    msg.errorresult = 'Login Failed with status: ' + msg.statusCode;\n}\nmsg.attempt += 1;\nif (msg.attempt < msg.max_retries) {\n    // Retry\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.max_retries + ' attempts';\n    return [msg, null];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 240,
+        "wires": [
+            [
+                "6c531c73bb9ea46f",
+                "464a08a7930a8b25"
+            ],
+            [
+                "055fefc47e2a9965",
+                "0deedfe07fbaeab4"
+            ]
+        ]
+    },
+    {
+        "id": "6c531c73bb9ea46f",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "5. Final Validation",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 280,
+        "wires": [
+            [
+                "670f138e65b086f0"
             ]
         ]
     },
@@ -1787,7 +1861,7 @@
             "regex": []
         },
         "outputInitially": true,
-        "stateType": "num",
+        "stateType": "str",
         "ifState": "0",
         "ifStateType": "num",
         "ifStateOperator": "is",
@@ -1804,7 +1878,7 @@
             {
                 "property": "payload",
                 "propertyType": "msg",
-                "value": "",
+                "value": "number",
                 "valueType": "entityState"
             }
         ],
@@ -1861,7 +1935,7 @@
             "regex": []
         },
         "outputInitially": true,
-        "stateType": "num",
+        "stateType": "str",
         "ifState": "0",
         "ifStateType": "num",
         "ifStateOperator": "gt",
@@ -1878,7 +1952,7 @@
             {
                 "property": "payload",
                 "propertyType": "msg",
-                "value": "",
+                "value": "number",
                 "valueType": "entityState"
             }
         ],
@@ -2041,7 +2115,7 @@
                 "t": "set",
                 "p": "enable",
                 "pt": "msg",
-                "to": "$contains(\"ChargingLadenOccupiedTransactionTransactie voorbereiden\",$.enable)",
+                "to": "$contains(\"ChargingLaden (vol)OccupiedTransactionTransactie voorbereiden\",$.enable)",
                 "tot": "jsonata"
             }
         ],
@@ -2149,6 +2223,15 @@
         "z": "7801bca7eb84dbaf",
         "name": "Stop or reset charging",
         "rules": [
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Laden (vol)",
+                "fromt": "str",
+                "to": "stop",
+                "tot": "str"
+            },
             {
                 "t": "change",
                 "p": "50five.action",
@@ -2555,7 +2638,7 @@
         "id": "91e30fc5ccf91f78",
         "type": "mqtt-broker",
         "name": "",
-        "broker": "core-mosquitto",
+        "broker": "192.168.2.205",
         "port": 1883,
         "clientid": "",
         "autoConnect": true,
@@ -2586,10 +2669,17 @@
         "id": "a962aadcdd5cb1ef",
         "type": "server",
         "name": "Home Assistant",
-        "version": 5,
+        "version": 6,
         "addon": true,
         "rejectUnauthorizedCerts": true,
-        "ha_boolean": "y|yes|true|on|home|open",
+        "ha_boolean": [
+            "y",
+            "yes",
+            "true",
+            "on",
+            "home",
+            "open"
+        ],
         "connectionDelay": true,
         "cacheJson": true,
         "heartbeat": false,
@@ -3024,5 +3114,13 @@
         "manufacturer": "Node-RED",
         "model": "",
         "swVersion": ""
+    },
+    {
+        "id": "33339442330caa2c",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     }
 ]
