@@ -1,0 +1,4056 @@
+[
+    {
+        "id": "afe326f672e3cd97",
+        "type": "subflow",
+        "name": "50five (subflow)",
+        "info": "## About this subflow\n\nThis subflow will control 50five (fka. Shell Recharge or Newmotion) car charging equipment. It's loosly based on the Shell Recharge script from dgthomson.\n\n## Getting started\n\nDrag the 50five node into a flow.\n\nDouble-click on the new node.\n\nUsing the credentials used to login to the 50five website, enter the username and password into the respective fields of the `Edit subflow instance: <xxx>` box which appears.\n\n## Inputs\n\n> msg.payload = { \"action\": \"_ACTION_\" }\n\n...where _ACTION_ is:\n\n**start** and **stop**\n\nStart or stop a charging session.\n\n> msg.payload = { \"action\": \"start\"}\n\n**soft-reset** and **hard-reset**\n\nReset the charging equipment.\n\n**unlock**\n\nUnlock the connector\n\n**block** and **unblock**\n\nBlock/unblock the charging\n\n**poll**\n\nPoll the charging equipment once for status information: this gives details directly from 50five like _'Charging'_ and _'Occupied'_. \n\n> msg.payload = { \"action\": \"poll\" }\n\n## Outputs\n\nThe **_Output_** payload contains the status of the charger.\nAll information in msg.spot_overview and msg.status\n\n## Contact\n\nvia [Github](https://github.com/wilbiev/50five)\n\n## Thanks\n\nThanks to dgthomson for his shell recharge script!! [Github](https://github.com/dgthomson/nodered-shellrecharge)\nThanks to nikagl for the first version of this script!! [Github](https://github.com/nikagl/50five)",
+        "category": "",
+        "in": [
+            {
+                "x": 40,
+                "y": 380,
+                "wires": [
+                    {
+                        "id": "ab42827aa9a16541"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1020,
+                "y": 1300,
+                "wires": [
+                    {
+                        "id": "ad396f2bbd1d09ee",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "username",
+                "type": "str",
+                "value": "wilbert.van.vilsteren@achmea.nl",
+                "ui": {
+                    "icon": "font-awesome/fa-user-circle-o",
+                    "label": {
+                        "en-US": "Username"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            },
+            {
+                "name": "password",
+                "type": "cred",
+                "ui": {
+                    "icon": "font-awesome/fa-unlock-alt",
+                    "label": {
+                        "en-US": "Password"
+                    }
+                }
+            },
+            {
+                "name": "url",
+                "type": "str",
+                "value": "https://50five-snl.evc-net.com",
+                "ui": {
+                    "label": {
+                        "en-US": "50five URL"
+                    },
+                    "type": "input",
+                    "opts": {
+                        "types": [
+                            "str"
+                        ]
+                    }
+                }
+            }
+        ],
+        "meta": {
+            "module": "50five",
+            "type": "dgt.nodered.35e.shellrecharge",
+            "version": "0.0.3 (2025-07-27)",
+            "author": "Wilbert van Vilsteren <wilbie@kpnmail.nl>",
+            "desc": "Nodered subflow to control 50five charging equipment.",
+            "keywords": "shell,recharge,shell recharge,new,motion,newmotion,evse,charge,50five",
+            "license": "GPL-3.0"
+        },
+        "color": "#0097A9",
+        "icon": "font-awesome/fa-plug"
+    },
+    {
+        "id": "37207b0ef9a04622",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Login",
+        "func": "var phpsessid = flow.get('PHPSESSID') || null;\nvar serverid = flow.get('SERVERID') || null;\nif (phpsessid && serverid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 460,
+        "wires": [
+            [
+                "86cf3e689ec0a5a8"
+            ],
+            [
+                "eeb3b3d597f17754"
+            ]
+        ]
+    },
+    {
+        "id": "ab42827aa9a16541",
+        "type": "switch",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "property": "50five.action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "login",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "start",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "stop",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "soft-reset",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "hard-reset",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "unlock",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "block",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "unblock",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "poll",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "logout",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 10,
+        "x": 85,
+        "y": 380,
+        "wires": [
+            [
+                "eeb3b3d597f17754"
+            ],
+            [
+                "069cbd329fb8ac9c"
+            ],
+            [
+                "a9a64010ecdf0e20"
+            ],
+            [
+                "f5089a640f110665"
+            ],
+            [
+                "a0511de8bb0640fc"
+            ],
+            [
+                "b211241b4273fa5b"
+            ],
+            [
+                "38b94ffca9ba4d2c"
+            ],
+            [
+                "3c36352314233c97"
+            ],
+            [
+                "07b9cf556f13b294"
+            ],
+            [
+                "64520b122fb39861"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "829677e378046f06",
+        "type": "link in",
+        "z": "afe326f672e3cd97",
+        "name": "Authenticate",
+        "links": [],
+        "x": 515,
+        "y": 40,
+        "wires": [
+            [
+                "e745a599c9efa2a4",
+                "de872fa17c1846e7"
+            ]
+        ]
+    },
+    {
+        "id": "2ca402a99de11343",
+        "type": "comment",
+        "z": "afe326f672e3cd97",
+        "name": "Authenticate",
+        "info": "",
+        "x": 410,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "e745a599c9efa2a4",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Get Username and Password + Max Retries",
+        "rules": [
+            {
+                "t": "set",
+                "p": "username",
+                "pt": "msg",
+                "to": "username",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "password",
+                "pt": "msg",
+                "to": "password",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "max_retries",
+                "pt": "msg",
+                "to": "3",
+                "tot": "num"
+            },
+            {
+                "t": "set",
+                "p": "attempt",
+                "pt": "msg",
+                "to": "1",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 590,
+        "y": 80,
+        "wires": [
+            [
+                "87bb0099c2bff7c9"
+            ]
+        ]
+    },
+    {
+        "id": "76f654c7b3feadba",
+        "type": "link in",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [],
+        "x": 195,
+        "y": 460,
+        "wires": [
+            [
+                "37207b0ef9a04622",
+                "893bf7714f019f15"
+            ]
+        ]
+    },
+    {
+        "id": "0fa54e940c405816",
+        "type": "comment",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "info": "",
+        "x": 240,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "fda03362ccda5b6d",
+        "type": "link out",
+        "z": "afe326f672e3cd97",
+        "name": "link out 1",
+        "mode": "return",
+        "links": [],
+        "x": 1165,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "670f138e65b086f0",
+        "type": "link out",
+        "z": "afe326f672e3cd97",
+        "name": "link out 2",
+        "mode": "return",
+        "links": [],
+        "x": 715,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "eeb3b3d597f17754",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "links": [
+            "829677e378046f06"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 450,
+        "y": 340,
+        "wires": [
+            [
+                "c9278b4cb8e5f69c"
+            ]
+        ]
+    },
+    {
+        "id": "c9278b4cb8e5f69c",
+        "type": "switch",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "property": "50five.action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "login",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "login",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 555,
+        "y": 340,
+        "wires": [
+            [
+                "36fbafc84636541a"
+            ],
+            [
+                "89a8ce5f7b440922"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "89a8ce5f7b440922",
+        "type": "switch",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "Login successful",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "Login successful",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 625,
+        "y": 340,
+        "wires": [
+            [
+                "aaad9fdb0931a81b"
+            ],
+            [
+                "dd94143ffd519d96",
+                "37207b0ef9a04622"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "aaad9fdb0931a81b",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Login Failed",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ad396f2bbd1d09ee",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Extract Status",
+        "func": "if (msg.spot_overview.CARDID == \"\") {\n    msg.card_id = \"none\"\n}\nelse {\n    msg.card_id = msg.spot_overview.CARDID;\n}\nif (msg.spot_overview.MOM_POWER_KW === null) {\n    msg.power = 0;\n}\nelse {\n    msg.power = parseFloat(msg.spot_overview.MOM_POWER_KW);\n}\nif (msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH === null) {\n    msg.energy = 0;\n}\nelse {\n    msg.energy = parseFloat(msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH);\n}\nif (msg.spot_overview.TRANSACTION_TIME_H_M === null) {\n    msg.time = 0;\n}\nelse {\n    var time = msg.spot_overview.TRANSACTION_TIME_H_M;\n    var parts = time.split(':');\n    if (parts.length == 2) {\n        msg.time = parseInt(parts[0]) * 60 + parseInt(parts[1]);\n    }\n    else {\n        msg.time = 0;\n    }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 840,
+        "y": 1300,
+        "wires": [
+            [
+                "d149e3c954175a26"
+            ]
+        ]
+    },
+    {
+        "id": "64520b122fb39861",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Logout",
+        "func": "flow.set('PHPSESSID', '');\nflow.set('SERVERID', '');\nflow.set('spotID', '');\nflow.set('channelID', '');\nflow.set('userID', '');\nflow.set('cardID', '');\n\nmsg.payload = \"Logout Completed...\";\nmsg.spot_overview = \"\"\nmsg.status = \"\"\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 210,
+        "y": 1340,
+        "wires": [
+            [
+                "48d5a61c52da6f54"
+            ]
+        ]
+    },
+    {
+        "id": "48d5a61c52da6f54",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Logged out",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 430,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "de872fa17c1846e7",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Auth Begin",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 40,
+        "wires": []
+    },
+    {
+        "id": "464a08a7930a8b25",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Auth Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0deedfe07fbaeab4",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Auth Retry",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 770,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "893bf7714f019f15",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "d": true,
+        "name": "Props Begin",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 250,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "e095d5d4bde9b040",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Props Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1210,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "dd94143ffd519d96",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Login Success",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "36fbafc84636541a",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Manual Login",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 780,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "e212968823cdeec7",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Charging Started",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "651b0c71fc1625b4",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Charging Stopped",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "8fa98544d309b480",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Soft Reset Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "d149e3c954175a26",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Status Received",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1080,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "c2211e7d9f57648c",
+        "type": "switch",
+        "z": "afe326f672e3cd97",
+        "name": "Check output",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "[]",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "[]",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 970,
+        "y": 460,
+        "wires": [
+            [
+                "9d60367871b80759"
+            ],
+            [
+                "ae736fe8880516c1"
+            ]
+        ]
+    },
+    {
+        "id": "9d60367871b80759",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Reset Session IDS",
+        "func": "flow.set('PHPSESSID', '');\nflow.set('SERVERID', '');\nmsg.headers['Cookie'] = '';\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1030,
+        "y": 400,
+        "wires": [
+            [
+                "7b18414c2fbadd7d"
+            ]
+        ]
+    },
+    {
+        "id": "7b18414c2fbadd7d",
+        "type": "trigger",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "payl",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 1200,
+        "y": 400,
+        "wires": [
+            [
+                "eeb3b3d597f17754"
+            ]
+        ]
+    },
+    {
+        "id": "87bb0099c2bff7c9",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Login with Retry",
+        "func": "var retries = msg.max_retries || 3;\nvar attempt = msg.attempt || 1;\n\nlet username = msg.username || env.get('username');\nlet password = msg.password || env.get('password');\nvar baseUrl = env.get('url');\nmsg.url = baseUrl + '/Login/Login';\nmsg.headers = {\n    \"Content-Type\": \"application/x-www-form-urlencoded\",\n    \"User-Agent\": \"Mozilla/5.0\",\n    \"Referer\": baseUrl + '/Login/Login'\n};\nmsg.method = \"POST\";\nmsg.payload = `emailField=${encodeURIComponent(username)}`;\nmsg.payload += `&passwordField=${encodeURIComponent(password)}`;\nmsg.followRedirects = false; \nmsg.attempt = attempt;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 120,
+        "wires": [
+            [
+                "e26e2636964dc048"
+            ]
+        ]
+    },
+    {
+        "id": "e26e2636964dc048",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Login",
+        "method": "use",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 490,
+        "y": 160,
+        "wires": [
+            [
+                "ea910e8852926fd2"
+            ]
+        ]
+    },
+    {
+        "id": "ea910e8852926fd2",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Login Success",
+        "func": "if (msg.statusCode === 302 || msg.statusCode === 307) {\n    // Check for login success by inspecting HTML\n    var phpsessid = msg.responseCookies.PHPSESSID.value || null;\n    var serverid = msg.responseCookies.SERVERID.value || null;\n    if (phpsessid && serverid) {\n        // Success: store cookies\n        flow.set('PHPSESSID', phpsessid);\n        flow.set('SERVERID', serverid);\n        msg.payload = 'Login successful';\n        msg.cookies = {\n            \"SERVERID\": serverid,\n            \"PHPSESSID\": phpsessid\n        };\n        return [msg, null];\n    } else {\n        msg.errorresult = 'No phpsessid or serverid';\n    }\n}\nelse {\n    msg.errorresult = 'Login Failed with status: ' + msg.statusCode;\n}\nmsg.attempt += 1;\nif (msg.attempt < msg.max_retries) {\n    // Retry\n    return [null, msg];\n} else {\n    msg.payload = 'Login failed after ' + msg.max_retries + ' attempts';\n    return [msg, null];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 200,
+        "wires": [
+            [
+                "464a08a7930a8b25",
+                "670f138e65b086f0"
+            ],
+            [
+                "0deedfe07fbaeab4",
+                "0b1046325b043406"
+            ]
+        ]
+    },
+    {
+        "id": "86cf3e689ec0a5a8",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get spotID",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get('PHPSESSID') || null;\nvar serverid = flow.get('SERVERID') || null;\nif (phpsessid && serverid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService\",\n            \"method\": \"networkOverview\",\n            \"params\": {\n                \"mode\": \"id\"\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 460,
+        "wires": [
+            [
+                "406d05bd7503217e"
+            ]
+        ]
+    },
+    {
+        "id": "406d05bd7503217e",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 460,
+        "wires": [
+            [
+                "c2211e7d9f57648c"
+            ]
+        ]
+    },
+    {
+        "id": "ae736fe8880516c1",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Save spotID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "spotID",
+                "pt": "flow",
+                "to": "payload[0][0].IDX",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "status",
+                "pt": "msg",
+                "to": "payload[0][0]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1170,
+        "y": 460,
+        "wires": [
+            [
+                "7ecf40c4a84ba5b9"
+            ]
+        ]
+    },
+    {
+        "id": "da19f00c29ef91df",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get totalEnergy",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService\",\n            \"method\":\"totalUsage\",\n            \"params\":{\n                \"mode\":\"rechargeSpot\",\n                \"rechargeSpotIds\": spotid,\n                \"maxCache\":3600\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 580,
+        "wires": [
+            [
+                "d748d59bfbbb3ee6"
+            ]
+        ]
+    },
+    {
+        "id": "d748d59bfbbb3ee6",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 580,
+        "wires": [
+            [
+                "e1e0a784249562a4"
+            ]
+        ]
+    },
+    {
+        "id": "e1e0a784249562a4",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Calculate Total Energy",
+        "func": "let rawValue = msg.payload[0].number;\nlet cleanValue = rawValue.toString().replace(',', '.');\nlet value = parseFloat(cleanValue) || 0;\n\nlet unit = msg.payload[0].unit || \"KWH\";\nlet unitUpper = unit.trim().toUpperCase();\n\n// Conversion factors to kWh\nconst conversionFactors = {\n    \"WH\": 0.001,      // 1 Wh = 0.001 kWh\n    \"KWH\": 1.0,       // 1 kWh = 1 kWh\n    \"MWH\": 1000.0,    // 1 MWh = 1000 kWh\n    \"GWH\": 1000000.0  // 1 GWh = 1000000 kWh\n};\n\n// Check if unit exists, otherwise default to 1.0 and log warning\nlet factor = conversionFactors[unitUpper];\n\nif (factor === undefined) {\n    factor = 1.0;\n}\n\n// Perform calculation and update payload\nmsg.totalEnergy_kWh = value * factor;\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1000,
+        "y": 580,
+        "wires": [
+            [
+                "efb3c633bdc8e65b"
+            ]
+        ]
+    },
+    {
+        "id": "7ecf40c4a84ba5b9",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get spotOverview",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"overview\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 550,
+        "y": 520,
+        "wires": [
+            [
+                "f50a0a3798e5b6e1"
+            ]
+        ]
+    },
+    {
+        "id": "f50a0a3798e5b6e1",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 520,
+        "wires": [
+            [
+                "08e255a09640aa0c"
+            ]
+        ]
+    },
+    {
+        "id": "efb3c633bdc8e65b",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get userID",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"userAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 640,
+        "wires": [
+            [
+                "d6c93a701d1f49d8"
+            ]
+        ]
+    },
+    {
+        "id": "d6c93a701d1f49d8",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 640,
+        "wires": [
+            [
+                "f14a0ee472ed1d0a"
+            ]
+        ]
+    },
+    {
+        "id": "4a63c298eca2ae87",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get cardID",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar userid = flow.get(\"userID\")\nif (phpsessid && serverid && spotid && userid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"cardAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid,\n                \"customerId\": userid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 530,
+        "y": 700,
+        "wires": [
+            [
+                "2a76d7e5f30ef2d3"
+            ]
+        ]
+    },
+    {
+        "id": "2a76d7e5f30ef2d3",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 760,
+        "y": 700,
+        "wires": [
+            [
+                "98d3cff3e1954720"
+            ]
+        ]
+    },
+    {
+        "id": "f14a0ee472ed1d0a",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Save userID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "userID",
+                "pt": "flow",
+                "to": "payload[0][0].id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CUSTOMERS_IDX",
+                "pt": "msg",
+                "to": "payload[0][0].id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CUSTOMER_NAME",
+                "pt": "msg",
+                "to": "payload[0][0].text",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 970,
+        "y": 640,
+        "wires": [
+            [
+                "4a63c298eca2ae87"
+            ]
+        ]
+    },
+    {
+        "id": "98d3cff3e1954720",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Save cardID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "cardID",
+                "pt": "flow",
+                "to": "payload[0][0].id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CARDS_IDX",
+                "pt": "msg",
+                "to": "payload[0][0].id",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CARDID",
+                "pt": "msg",
+                "to": "payload[0][0].text",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 970,
+        "y": 700,
+        "wires": [
+            [
+                "fda03362ccda5b6d",
+                "e095d5d4bde9b040"
+            ]
+        ]
+    },
+    {
+        "id": "08e255a09640aa0c",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Save channelID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "channelID",
+                "pt": "flow",
+                "to": "payload[0][0].CHANNEL",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview",
+                "pt": "msg",
+                "to": "payload[0][0]",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 980,
+        "y": 520,
+        "wires": [
+            [
+                "da19f00c29ef91df"
+            ]
+        ]
+    },
+    {
+        "id": "069cbd329fb8ac9c",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nvar userid = flow.get(\"userID\")\nvar cardid = flow.get(\"cardID\")\nif (phpsessid && serverid && spotid && channelid && userid && cardid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 820,
+        "wires": [
+            [
+                "7be063e733126985"
+            ],
+            [
+                "982094bfa585c50e"
+            ]
+        ]
+    },
+    {
+        "id": "982094bfa585c50e",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 820,
+        "wires": [
+            [
+                "7be063e733126985"
+            ]
+        ]
+    },
+    {
+        "id": "7be063e733126985",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Start charging",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nvar userid = flow.get(\"userID\")\nvar cardid = flow.get(\"cardID\")\nif (phpsessid && serverid && spotid && channelid && userid && cardid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"StartTransaction\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid,\n                \"customer\": userid,\n                \"card\": cardid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 820,
+        "wires": [
+            [
+                "4394bd5b12fa1315"
+            ]
+        ]
+    },
+    {
+        "id": "4394bd5b12fa1315",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 820,
+        "wires": [
+            [
+                "e212968823cdeec7",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "5778180b9a73dbe5",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Stop charging",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"StopTransaction\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 880,
+        "wires": [
+            [
+                "a268737d8e375d7f"
+            ]
+        ]
+    },
+    {
+        "id": "a268737d8e375d7f",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 880,
+        "wires": [
+            [
+                "651b0c71fc1625b4",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "f608b5daa511a02d",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Soft reset",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"SoftReset\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 940,
+        "wires": [
+            [
+                "4015f4a12107a286"
+            ]
+        ]
+    },
+    {
+        "id": "4015f4a12107a286",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 940,
+        "wires": [
+            [
+                "8fa98544d309b480",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "4f58979fa7933c98",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Hard reset",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"HardReset\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 1000,
+        "wires": [
+            [
+                "75d5b17e47c4d874"
+            ]
+        ]
+    },
+    {
+        "id": "75d5b17e47c4d874",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1000,
+        "wires": [
+            [
+                "69a536daa30e2332",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "80b2f1a8fc87243a",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Unlock connector",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"UnlockConnector\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1060,
+        "wires": [
+            [
+                "bbc0bd8de5ee8730"
+            ]
+        ]
+    },
+    {
+        "id": "bbc0bd8de5ee8730",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1060,
+        "wires": [
+            [
+                "d9b2b84b817a8aef",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "eaacb54a75a13072",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Block charging",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"Block\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 1120,
+        "wires": [
+            [
+                "f1c2e76cb7b3199f"
+            ]
+        ]
+    },
+    {
+        "id": "f1c2e76cb7b3199f",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1120,
+        "wires": [
+            [
+                "e1bc12b618d2f8ee",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "9e33d1cf0b5764e9",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Unblock charging",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"Unblock\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 1180,
+        "wires": [
+            [
+                "425f3950ef6a8450"
+            ]
+        ]
+    },
+    {
+        "id": "425f3950ef6a8450",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1180,
+        "wires": [
+            [
+                "da2a2503a0516886",
+                "59d40634c85e0aa3"
+            ]
+        ]
+    },
+    {
+        "id": "a9a64010ecdf0e20",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 880,
+        "wires": [
+            [
+                "5778180b9a73dbe5"
+            ],
+            [
+                "a10b505b1d1757e8"
+            ]
+        ]
+    },
+    {
+        "id": "a10b505b1d1757e8",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 880,
+        "wires": [
+            [
+                "5778180b9a73dbe5"
+            ]
+        ]
+    },
+    {
+        "id": "f5089a640f110665",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 940,
+        "wires": [
+            [
+                "f608b5daa511a02d"
+            ],
+            [
+                "e931fb8d08ef49d0"
+            ]
+        ]
+    },
+    {
+        "id": "e931fb8d08ef49d0",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 940,
+        "wires": [
+            [
+                "f608b5daa511a02d"
+            ]
+        ]
+    },
+    {
+        "id": "a0511de8bb0640fc",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1000,
+        "wires": [
+            [
+                "4f58979fa7933c98"
+            ],
+            [
+                "8722a9d346d6bf9c"
+            ]
+        ]
+    },
+    {
+        "id": "8722a9d346d6bf9c",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 1000,
+        "wires": [
+            [
+                "4f58979fa7933c98"
+            ]
+        ]
+    },
+    {
+        "id": "b211241b4273fa5b",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1060,
+        "wires": [
+            [
+                "80b2f1a8fc87243a"
+            ],
+            [
+                "4fcd9f64f628c846"
+            ]
+        ]
+    },
+    {
+        "id": "4fcd9f64f628c846",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 1060,
+        "wires": [
+            [
+                "80b2f1a8fc87243a"
+            ]
+        ]
+    },
+    {
+        "id": "38b94ffca9ba4d2c",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1120,
+        "wires": [
+            [
+                "eaacb54a75a13072"
+            ],
+            [
+                "b2553a3a27914a30"
+            ]
+        ]
+    },
+    {
+        "id": "b2553a3a27914a30",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 1120,
+        "wires": [
+            [
+                "eaacb54a75a13072"
+            ]
+        ]
+    },
+    {
+        "id": "3c36352314233c97",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "outputs": 2,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1180,
+        "wires": [
+            [
+                "9e33d1cf0b5764e9"
+            ],
+            [
+                "cdc722f8e7dcfee3"
+            ]
+        ]
+    },
+    {
+        "id": "cdc722f8e7dcfee3",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 1180,
+        "wires": [
+            [
+                "9e33d1cf0b5764e9"
+            ]
+        ]
+    },
+    {
+        "id": "da2a2503a0516886",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Charging Unblocked",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "e1bc12b618d2f8ee",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Charging Blocked",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 1120,
+        "wires": []
+    },
+    {
+        "id": "d9b2b84b817a8aef",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Connector Unblocked",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "69a536daa30e2332",
+        "type": "debug",
+        "z": "afe326f672e3cd97",
+        "name": "Hard Reset Done",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1090,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "07b9cf556f13b294",
+        "type": "link call",
+        "z": "afe326f672e3cd97",
+        "name": "Get props",
+        "links": [
+            "76f654c7b3feadba"
+        ],
+        "linkType": "static",
+        "timeout": "30",
+        "x": 420,
+        "y": 1240,
+        "wires": [
+            [
+                "108aed2409b8e481"
+            ]
+        ]
+    },
+    {
+        "id": "59d40634c85e0aa3",
+        "type": "delay",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1060,
+        "y": 1240,
+        "wires": [
+            [
+                "07b9cf556f13b294"
+            ]
+        ]
+    },
+    {
+        "id": "0b1046325b043406",
+        "type": "trigger",
+        "z": "afe326f672e3cd97",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "payl",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 280,
+        "y": 200,
+        "wires": [
+            [
+                "87bb0099c2bff7c9"
+            ]
+        ]
+    },
+    {
+        "id": "108aed2409b8e481",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Get Logging",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"log\",\n            \"params\": {\n                \"rechargeSpotId\": spotid,\n                \"channel\": channelid,\n                \"detailed\": false,\n                \"id\": null,\n                \"extend\": false,\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 1240,
+        "wires": [
+            [
+                "3166868869330a0e"
+            ]
+        ]
+    },
+    {
+        "id": "3166868869330a0e",
+        "type": "http request",
+        "z": "afe326f672e3cd97",
+        "name": "POST Request",
+        "method": "use",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": true,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 840,
+        "y": 1240,
+        "wires": [
+            [
+                "1b344b92e765ebee"
+            ]
+        ]
+    },
+    {
+        "id": "1b344b92e765ebee",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Compose log",
+        "func": "// 1. Get the array\nlet data = msg.payload[0];\nif (!Array.isArray(data)) return msg;\n\nconst targetKeys = [\"LOG_DATE\", \"NOTIFICATION\", \"MOM_POWER_KW\", \"TRANS_ENERGY_DELIVERED_KWH\", \"TRANSACTION_TIME_H_M\"];\n\n// 2. Remove Duplicates based on Minute-level precision\nlet seen = new Set();\nlet uniqueData = data.filter(item => {\n    let dateVal = item.LOG_DATE || \"\";\n\n    // Efficiently remove \":ss\" from the end\n    let dateToMinute = dateVal.slice(0, -3);\n\n    // Create identifier for comparison\n    let identifier = `${dateToMinute}|${item.NOTIFICATION}|${item.MOM_POWER_KW}|${item.TRANS_ENERGY_DELIVERED_KWH}|${item.TRANSACTION_TIME_H_M}`;\n\n    if (seen.has(identifier)) return false;\n    seen.add(identifier);\n    return true;\n});\n\n// 3. Limit to first 100 items\nlet limitedData = uniqueData.slice(0, 100);\n\n\n// 4. Define the specific keys we want in our table\nconst headerKeys = [\"Date\", \"Notification\", \"Power (kW)\", \"Energy (kWh)\", \"Time\"];\n\n// 5. Create Markdown Table Header\nlet header = \"| \" + headerKeys.join(\" | \") + \" |\";\nlet separator = \"| \" + targetKeys.map(() => \"---\").join(\" | \") + \" |\";\n\n// 6. Build the Rows\nlet rows = limitedData.map(item => {\n    return \"| \" + targetKeys.map(key => {\n        // Grab the value using our specific keys\n        let val = item[key];\n\n        // Apply Date Formatting if the key is DATE\n        if (key === \"LOG_DATE\" && val) {\n            val = formatDutchDate(val);\n        }\n        // Handle null/undefined values and ensure it's a safe string\n        let cell = (val === null || val === undefined) ? \"-\" : val.toString();\n\n        // Final safety: Escape any '|' characters to avoid breaking the markdown\n        return cell.replace(/\\|/g, \"\\\\|\");\n    }).join(\" | \") + \" |\";\n});\n\n// 7. Add heartbeat\nlet now = new Date();\nlet timestamp = now.toLocaleDateString('nl-NL', { day: '2-digit', month: '2-digit', year: '2-digit' }) + \n                \" \" + \n                now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });\n\n// 8. Combine everything\nmsg.logging = \"> 🕒 **Last Update:** \" + timestamp + \"\\n\\n\" + [header, separator, ...rows].join(\"\\n\");\nmsg.payload = \"\";\n\nreturn msg;\n\n// --- Your Date Formatter Function (Include this at the bottom of the node) ---\nfunction formatDutchDate(dateStr) {\n    try {\n        const months = { \"jan.\": \"01\", \"feb.\": \"02\", \"mrt.\": \"03\", \"apr.\": \"04\", \"mei\": \"05\", \"jun.\": \"06\", \"jul.\": \"07\", \"aug.\": \"08\", \"sep.\": \"09\", \"okt.\": \"10\", \"nov.\": \"11\", \"dec.\": \"12\" };\n        let parts = dateStr.split(\"-\");\n        let day = parts[0].padStart(2, '0');\n        let monthAbbr = parts[1].toLowerCase();\n        let subParts = parts[2].split(\" \");\n        let year = subParts[0].slice(-2);\n        let timeParts = subParts[1].split(\":\");\n        return `${day}-${months[monthAbbr] || \"01\"}-${year} ${timeParts[0]}:${timeParts[1]}`;\n    } catch(e) { return dateStr; }\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 610,
+        "y": 1300,
+        "wires": [
+            [
+                "ad396f2bbd1d09ee"
+            ]
+        ]
+    },
+    {
+        "id": "7801bca7eb84dbaf",
+        "type": "tab",
+        "label": "50five",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fb419651251e9150",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Login",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "login",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 370,
+        "y": 40,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "c1e482c447619238",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "start",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "0e68820a56fb8fc9",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "stop",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "90a2401d152fa35f",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "poll",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 440,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "a3770db499d96007",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Soft Reset",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "soft-reset",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 100,
+        "y": 540,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "f697e22eb9f3d098",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Logout",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "logout",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 370,
+        "y": 80,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "6ac6eea04cf98b95",
+        "type": "mqtt out",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Output",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "91e30fc5ccf91f78",
+        "x": 960,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6dab1089e1b0cb2d",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "50five/status",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "spot_overview.NOTIFICATION",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 180,
+        "wires": [
+            [
+                "6ac6eea04cf98b95"
+            ]
+        ]
+    },
+    {
+        "id": "382121f46e1842a5",
+        "type": "mqtt in",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Action",
+        "topic": "50five/action",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "91e30fc5ccf91f78",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "aae1a1a38b69351f"
+            ]
+        ]
+    },
+    {
+        "id": "aae1a1a38b69351f",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "fccfd7e373f2a50f",
+        "type": "subflow:afe326f672e3cd97",
+        "z": "7801bca7eb84dbaf",
+        "name": "50five (subflow)",
+        "env": [
+            {
+                "name": "password",
+                "type": "cred"
+            }
+        ],
+        "x": 580,
+        "y": 240,
+        "wires": [
+            [
+                "6dab1089e1b0cb2d",
+                "46cb2363cb70d6a5",
+                "e9d7987951ce0357",
+                "ba78d643128143a7",
+                "86def0d3624278b7",
+                "1d1128fcab09b37c",
+                "f2d13a8802491c42",
+                "f7eab09251480673"
+            ]
+        ]
+    },
+    {
+        "id": "4e842f1ab9749a43",
+        "type": "ha-wait-until",
+        "z": "7801bca7eb84dbaf",
+        "name": "Location",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "device_tracker.t_819_xr_device_tracker"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "home",
+        "valueType": "str",
+        "timeout": "10",
+        "timeoutType": "num",
+        "timeoutUnits": "minutes",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "entityLocation": "data",
+        "entityLocationType": "none",
+        "x": 560,
+        "y": 1060,
+        "wires": [
+            [
+                "2281c165366c5695"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ff52d72b9f227131",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.t_819_xr_charge_flap_dc_status"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "0",
+        "ifStateType": "num",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 240,
+        "y": 1060,
+        "wires": [
+            [
+                "4e842f1ab9749a43"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2281c165366c5695",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Charging",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "start",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 1060,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "98d1459798c9d1c3",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.t_819_xr_charging_power"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "0",
+        "ifStateType": "num",
+        "ifStateOperator": "gt",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 220,
+        "y": 1120,
+        "wires": [
+            [
+                "430fb63956da77df"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "430fb63956da77df",
+        "type": "ha-wait-until",
+        "z": "7801bca7eb84dbaf",
+        "name": "Location",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "device_tracker.t_819_xr_device_tracker"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "home",
+        "valueType": "str",
+        "timeout": "10",
+        "timeoutType": "num",
+        "timeoutUnits": "minutes",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "entityLocation": "data",
+        "entityLocationType": "none",
+        "x": 560,
+        "y": 1120,
+        "wires": [
+            [
+                "d8697f7a8975c2b3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d8697f7a8975c2b3",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Polling",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "poll",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 750,
+        "y": 1120,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "1dbd3e7cbb974ab7",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.50five_status"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "enable",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 180,
+        "y": 1200,
+        "wires": [
+            [
+                "4f3d840b9954cf3a"
+            ]
+        ]
+    },
+    {
+        "id": "4f3d840b9954cf3a",
+        "type": "trigger",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "pay",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 540,
+        "y": 1200,
+        "wires": [
+            [
+                "86308813ac58a8dd"
+            ]
+        ]
+    },
+    {
+        "id": "86308813ac58a8dd",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "enable",
+                "pt": "msg",
+                "to": "$contains(\"ChargingLaden (vol)OccupiedTransactionTransactie voorbereiden\",$.enable)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 1200,
+        "wires": [
+            [
+                "af65a2c24aa736f0"
+            ]
+        ]
+    },
+    {
+        "id": "af65a2c24aa736f0",
+        "type": "ha-switch",
+        "z": "7801bca7eb84dbaf",
+        "name": "50five Charging switch",
+        "version": 0,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 2,
+        "entityConfig": "b7286b07244e38f8",
+        "enableInput": true,
+        "outputOnStateChange": true,
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 520,
+        "y": 1260,
+        "wires": [
+            [
+                "fddce25d177b820b"
+            ],
+            [
+                "29674594a4a3f0a1"
+            ]
+        ]
+    },
+    {
+        "id": "fddce25d177b820b",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start charging",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "start",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 1260,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "09072c96639f898c",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Polling",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "poll",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 1420,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "d7732ffb7038ab9f",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop or reset charging",
+        "rules": [
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Laden (vol)",
+                "fromt": "str",
+                "to": "stop",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Laden",
+                "fromt": "str",
+                "to": "stop",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Transactie voorbereiden",
+                "fromt": "str",
+                "to": "soft-reset",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 1320,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "29674594a4a3f0a1",
+        "type": "api-current-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Voorbereiding of Laden",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.50five_status",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 510,
+        "y": 1320,
+        "wires": [
+            [
+                "d7732ffb7038ab9f"
+            ]
+        ]
+    },
+    {
+        "id": "727e35e240301868",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "5",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 1420,
+        "wires": [
+            [
+                "09072c96639f898c"
+            ]
+        ]
+    },
+    {
+        "id": "c42a218fc831357c",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "15",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 1460,
+        "wires": [
+            [
+                "09072c96639f898c"
+            ]
+        ]
+    },
+    {
+        "id": "10551a808afb423a",
+        "type": "poll-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll every 5 minutes",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "exposeAsEntityConfig": "",
+        "updateInterval": "5",
+        "updateIntervalType": "num",
+        "updateIntervalUnits": "minutes",
+        "outputInitially": true,
+        "outputOnChanged": false,
+        "entityId": "sensor.50five_status",
+        "stateType": "str",
+        "ifState": "$contains(\"LadenGeblokkeerdTransactie voorbereiden\",$entity().state)",
+        "ifStateType": "jsonata",
+        "ifStateOperator": "jsonata",
+        "outputs": 2,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 130,
+        "y": 1460,
+        "wires": [
+            [
+                "727e35e240301868"
+            ],
+            [
+                "c42a218fc831357c"
+            ]
+        ]
+    },
+    {
+        "id": "5aae705f467816d5",
+        "type": "poll-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll every 5 minutes",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "exposeAsEntityConfig": "",
+        "updateInterval": "5",
+        "updateIntervalType": "num",
+        "updateIntervalUnits": "minutes",
+        "outputInitially": true,
+        "outputOnChanged": false,
+        "entityId": "input_boolean.ha_running",
+        "stateType": "habool",
+        "ifState": "true",
+        "ifStateType": "bool",
+        "ifStateOperator": "is",
+        "outputs": 2,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 130,
+        "y": 1400,
+        "wires": [
+            [
+                "727e35e240301868"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "46cb2363cb70d6a5",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Power",
+        "entityConfig": "5066435a6134f562",
+        "version": 0,
+        "state": "power",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e9d7987951ce0357",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Status",
+        "entityConfig": "0b496c3608a8d29e",
+        "version": 0,
+        "state": "spot_overview.NOTIFICATION",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "data",
+                "value": "logging",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2be6ccce5e41b274",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "3fd2d0877448559f",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "start",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 280,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "56d5e4180dee01f1",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "6566ca32ce67e468",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "stop",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "cd938daf288780c8",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "b430fa7abafaa161",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "poll",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 480,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "ba78d643128143a7",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Energy",
+        "entityConfig": "7ff0180e82cb7b26",
+        "version": 0,
+        "state": "energy",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 830,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "86def0d3624278b7",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Transaction time",
+        "entityConfig": "b42a68147137e86c",
+        "version": 0,
+        "state": "time",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d1128fcab09b37c",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Connector",
+        "entityConfig": "4e3f28e5cdc14525",
+        "version": 0,
+        "state": "spot_overview.CONNECTOR",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "spot_idx",
+                "value": "status.IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "channel_id",
+                "value": "spot_overview.CHANNEL",
+                "valueType": "msg"
+            },
+            {
+                "property": "software_version",
+                "value": "status.SOFTWARE_VERSION",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 840,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2d13a8802491c42",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Card-ID",
+        "entityConfig": "2d9ccaa955e12204",
+        "version": 0,
+        "state": "card_id",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "card_idx",
+                "value": "spot_overview.CARDS_IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_idx",
+                "value": "spot_overview.CUSTOMERS_IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_name",
+                "value": "spot_overview.CUSTOMER_NAME",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_address",
+                "value": "status.ADDRESS",
+                "valueType": "msg"
+            },
+            {
+                "property": "cost_center",
+                "value": "status.COST_CENTER_NUMBER",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 830,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7eab09251480673",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Total Energy",
+        "entityConfig": "ebb6d680553e987e",
+        "version": 0,
+        "state": "totalEnergy_kWh",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 840,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea75ec70eb3a4162",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Hard Reset",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "hard-reset",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "7c818a9a25dbf929",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unlock Connector",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "unlock",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 740,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "63a72f73380b5ac5",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Block Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "block",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 120,
+        "y": 840,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "7f034ee067b8329e",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unblock Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "unblock",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 940,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "350bf313a10d5e1e",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Soft Reset",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "49aa13ff46f41486",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "soft-reset",
+                "valueType": "str"
+            }
+        ],
+        "x": 100,
+        "y": 580,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "d982959ab0e9ce09",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Hard Reset",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "a706354ccf0e86fa",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "hard-reset",
+                "valueType": "str"
+            }
+        ],
+        "x": 110,
+        "y": 680,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "21d8eee162b442fc",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unlock Connector",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "70498a44e7b6b601",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "unlock",
+                "valueType": "str"
+            }
+        ],
+        "x": 130,
+        "y": 780,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "1404c53a37a0ddcd",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Block Charging",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "8ea4bf96d1e09a41",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "block",
+                "valueType": "str"
+            }
+        ],
+        "x": 120,
+        "y": 880,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "959a71f5038a643c",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unblock Charging",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "6932318865288885",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "unblock",
+                "valueType": "str"
+            }
+        ],
+        "x": 130,
+        "y": 980,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "91e30fc5ccf91f78",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.2.205",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a962aadcdd5cb1ef",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 6,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": [
+            "y",
+            "yes",
+            "true",
+            "on",
+            "home",
+            "open"
+        ],
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": false,
+        "heartbeatInterval": "30",
+        "areaSelector": "friendlyName",
+        "deviceSelector": "friendlyName",
+        "entitySelector": "friendlyName",
+        "statusSeparator": ": ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "default",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "b7286b07244e38f8",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Charging switch",
+        "version": 6,
+        "entityType": "switch",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Charging switch"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "config"
+            },
+            {
+                "property": "device_class",
+                "value": "switch"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5066435a6134f562",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Power"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kW"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "0b496c3608a8d29e",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Status",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Status"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3fd2d0877448559f",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Start",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Start"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:play-circle"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6566ca32ce67e468",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Stop",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Stop"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:stop-circle"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "b430fa7abafaa161",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Poll",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Poll"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "7ff0180e82cb7b26",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Energy"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:lightning-bolt"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "total_increasing"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "b42a68147137e86c",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Transaction time",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Transaction time"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:timer"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "min"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "4e3f28e5cdc14525",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Connector",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Connector"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:connection"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "2d9ccaa955e12204",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Card-ID",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Card-ID"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:card-bulleted"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "ebb6d680553e987e",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Total Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Total Energy"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "total_increasing"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "49aa13ff46f41486",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Soft Reset",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Soft Reset"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a706354ccf0e86fa",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Hard Reset",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Hard Reset"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "70498a44e7b6b601",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Unlock Connector",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Unlock Connector"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8ea4bf96d1e09a41",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Block Charging",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Block Charging"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6932318865288885",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Unblock Charging",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Unblock Charging"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8b0d0b1b2ee28c9b",
+        "type": "ha-device-config",
+        "name": "Laadpaal",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
+    },
+    {
+        "id": "51462e6a09bc342e",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
+    }
+]

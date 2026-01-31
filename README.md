@@ -1,49 +1,55 @@
-WARNING: 
-
-I have stopped development for this myself as I have moved to https://github.com/Platzii/homeassistant-evcnet which does not require these flows and node-red anymore... So I cannot test anything and I would recommend forking this repo to someone that can still continue development that includes testing the changes...
-
-Regards,
-
-Nika.
-
-_50five.json_
-
-This is the Node Red flow for 50five charging station.
+## This is the Node Red flow for 50five charging station.
 
 * Import the file into Node Red
 * Change the URL, username and password on the subflow
 * Publish the flow
 
-Current flow supports:
+# Current flow 50five_v2.0.json supports:
 * Login
 * Start/Stop charging
 * Poll status
-* Reset (softreset, not sure yet what the difference between hard- and softreset is)
+* Hard/Soft reset
+* Unlock connector
+* Block/Unblock charging
 * Logout
 * Use MQTT to send actions
 * Use MQTT to receive status
-* Creates home assistant buttons & switch for start/stop/polling/reset
+* Creates home assistant buttons & switch for start/stop
 
-In the "Extract Card ID" function node you may need to replace this depending on the card you'd like to use:
+# Home Assistant buttons:
+* 50five Start
+* 50five Stop
+* 50five Poll
+* 50five Soft reset
+* 50five Hard reset
+* 50five Unlock connector
+* 50five Block charging
+* 50five Unblock charging
 
+# Home Assistant sensors:
+* 50five Card-ID
+* Atributes: Card idx, Customer idx, Customer name, Customer address, Cost center
+
+* 50five Connector
+* Attributes: Spot idx, Channel ID, Software version
+
+* 50five Status
+* Attributes: Data (transaction log information)
+
+# Home Assistant swicth:
+* 50five Charging switch
+
+In the "Save cardID" change node (subflow) you may need to the payload depending on the card you'd like to use:
+Default is using the first card: 
 ```
-var cardid = payload[0][1].id;
+payload[0][0].id, payload[0][0].text
+```
+If you want to use the second card you can change this to:
+```
+payload[0][1].id, payload[0][1].text
 ````
 
-change this to the following if you would like to use the first card:
+## Thanks
 
-```
-var cardid = payload[0][0].id;
-````
-
-_50five.postman_collection.json_
-
-This is my (anonimized) json collection. API connection doesn't work but the others do...
-
-Make sure to replace:
-* &lt;USERNAME HERE&gt; = your 50five username
-* &lt;PASSWORD HERE&gt; = your 50five password
-* &lt;CHARGESPOT HERE&gt; = the chargespot ID returned by EndUserRechargeSpotListView_99
-* &lt;NAME HERE&gt; = a name that is used to search for customers in your chargespot (my first name in my case)
-* &lt;CUSTOMERID HERE&gt; = the customer id returned by RechargeSpotDashboard_642
-* &lt;CARDID HERE&gt; = the card id returned by RechargeSpotDashboard_688
+Special thanks to dgthomson for his Shell Recharge script!! [Github](https://github.com/dgthomson/nodered-shellrecharge)
+Special thanks to nikagl for the first version of this script!! [Github](https://github.com/nikagl/50five)
