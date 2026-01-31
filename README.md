@@ -50,5 +50,6 @@ payload[0][1].id, payload[0][1].text
 ````
 
 ## Thanks
-Special thanks to dgthomson for his Shell Recharge script!! [Github](https://github.com/dgthomson/nodered-shellrecharge)
-Special thanks to nikagl for the first version of this script!! [Github](https://github.com/nikagl/50five)
+Special thanks to [dgthomson](https://github.com/dgthomson/nodered-shellrecharge) for his Shell Recharge script!!
+
+Special thanks to [nikagl](https://github.com/nikagl/50five) for the first version of this script!!
