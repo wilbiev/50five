@@ -28,13 +28,13 @@
 
 ## Home Assistant sensors:
 * 50five Card-ID
-* Atributes: Card idx, Customer idx, Customer name, Customer address, Cost center
+  * Atributes: Card idx, Customer idx, Customer name, Customer address, Cost center
 
 * 50five Connector
-* Attributes: Spot idx, Channel ID, Software version
+  * Attributes: Spot idx, Channel ID, Software version
 
 * 50five Status
-* Attributes: Data (transaction log information)
+  * Attributes: Data (transaction log information)
 
 ## Home Assistant switch:
 * 50five Charging switch
