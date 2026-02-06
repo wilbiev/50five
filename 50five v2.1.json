@@ -32,7 +32,7 @@
             {
                 "name": "username",
                 "type": "str",
-                "value": "wilbert.van.vilsteren@achmea.nl",
+                "value": "<your username here>",
                 "ui": {
                     "icon": "font-awesome/fa-user-circle-o",
                     "label": {
@@ -48,6 +48,7 @@
             },
             {
                 "name": "password",
+                "value": "<your password here>",
                 "type": "cred",
                 "ui": {
                     "icon": "font-awesome/fa-unlock-alt",
@@ -198,7 +199,7 @@
                 "3c36352314233c97"
             ],
             [
-                "07b9cf556f13b294"
+                "f11916d91ae3c3e5"
             ],
             [
                 "64520b122fb39861"
@@ -311,8 +312,8 @@
         "name": "link out 1",
         "mode": "return",
         "links": [],
-        "x": 1165,
-        "y": 660,
+        "x": 1275,
+        "y": 680,
         "wires": []
     },
     {
@@ -435,7 +436,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Extract Status",
-        "func": "if (msg.spot_overview.CARDID == \"\") {\n    msg.card_id = \"none\"\n}\nelse {\n    msg.card_id = msg.spot_overview.CARDID;\n}\nif (msg.spot_overview.MOM_POWER_KW === null) {\n    msg.power = 0;\n}\nelse {\n    msg.power = parseFloat(msg.spot_overview.MOM_POWER_KW);\n}\nif (msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH === null) {\n    msg.energy = 0;\n}\nelse {\n    msg.energy = parseFloat(msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH);\n}\nif (msg.spot_overview.TRANSACTION_TIME_H_M === null) {\n    msg.time = 0;\n}\nelse {\n    var time = msg.spot_overview.TRANSACTION_TIME_H_M;\n    var parts = time.split(':');\n    if (parts.length == 2) {\n        msg.time = parseInt(parts[0]) * 60 + parseInt(parts[1]);\n    }\n    else {\n        msg.time = 0;\n    }\n}\n\nreturn msg;",
+        "func": "if (msg.spot_overview.MOM_POWER_KW === null) {\n    msg.power = 0;\n}\nelse {\n    msg.power = parseFloat(msg.spot_overview.MOM_POWER_KW);\n}\nif (msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH === null) {\n    msg.energy = 0;\n}\nelse {\n    msg.energy = parseFloat(msg.spot_overview.TRANS_ENERGY_DELIVERED_KWH);\n}\nif (msg.spot_overview.TRANSACTION_TIME_H_M === null) {\n    msg.time = 0;\n}\nelse {\n    var time = msg.spot_overview.TRANSACTION_TIME_H_M;\n    var parts = time.split(':');\n    if (parts.length == 2) {\n        msg.time = parseInt(parts[0]) * 60 + parseInt(parts[1]);\n    }\n    else {\n        msg.time = 0;\n    }\n}\n\nmsg.payload = msg.card_options;\n\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -569,8 +570,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1210,
-        "y": 700,
+        "x": 1330,
+        "y": 720,
         "wires": []
     },
     {
@@ -905,7 +906,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Get totalEnergy",
-        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService\",\n            \"method\":\"totalUsage\",\n            \"params\":{\n                \"mode\":\"rechargeSpot\",\n                \"rechargeSpotIds\": spotid,\n                \"maxCache\":3600\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\DashboardAsyncService\",\n            \"method\":\"totalUsage\",\n            \"params\":{\n                \"mode\":\"rechargeSpot\",\n                \"rechargeSpotIds\": spotid,\n                \"maxCache\":3600\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -969,7 +970,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Get spotOverview",
-        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"overview\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"overview\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1013,7 +1014,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Get userID",
-        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"userAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nif (phpsessid && serverid && spotid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"userAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1057,7 +1058,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Get cardID",
-        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar userid = flow.get(\"userID\")\nif (phpsessid && serverid && spotid && userid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"cardAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid,\n                \"customerId\": userid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar userid = flow.get(\"userIDX\");\nif (phpsessid && serverid && spotid && userid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"cardAccess\",\n            \"params\": {\n                \"rechargeSpotId\": spotid,\n                \"customerId\": userid\n            },\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1092,7 +1093,7 @@
         "y": 700,
         "wires": [
             [
-                "98d3cff3e1954720"
+                "502ee9606df8c550"
             ]
         ]
     },
@@ -1145,9 +1146,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "cardID",
+                "p": "cardList",
                 "pt": "flow",
-                "to": "payload[0][0].id",
+                "to": "test_data",
                 "tot": "msg"
             },
             {
@@ -1163,6 +1164,13 @@
                 "pt": "msg",
                 "to": "payload[0][0].text",
                 "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "card_options",
+                "pt": "msg",
+                "to": "{\"options\": test_data.text}",
+                "tot": "jsonata"
             }
         ],
         "action": "",
@@ -1170,8 +1178,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 970,
-        "y": 700,
+        "x": 1130,
+        "y": 680,
         "wires": [
             [
                 "fda03362ccda5b6d",
@@ -1218,8 +1226,8 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nvar userid = flow.get(\"userID\")\nvar cardid = flow.get(\"cardID\")\nif (phpsessid && serverid && spotid && channelid && userid && cardid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
-        "outputs": 2,
+        "func": "if (msg.card_id) {\n    flow.set(\"cardID\", msg.card_id);\n} else {\n    flow.set(\"cardID\", \"\");\n}\nreturn msg;",
+        "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -1228,9 +1236,6 @@
         "x": 240,
         "y": 820,
         "wires": [
-            [
-                "7be063e733126985"
-            ],
             [
                 "982094bfa585c50e"
             ]
@@ -1259,7 +1264,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Start charging",
-        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nvar userid = flow.get(\"userID\")\nvar cardid = flow.get(\"cardID\")\nif (phpsessid && serverid && spotid && channelid && userid && cardid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"StartTransaction\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid,\n                \"customer\": userid,\n                \"card\": cardid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
+        "func": "msg.payload = \"\";\n// Get cookies from flow context\nvar phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nvar userid = flow.get(\"userID\")\nvar cardid = msg.spot_overview.CARDS_IDX\nif (phpsessid && serverid && spotid && channelid && userid && cardid) {\n    var baseUrl = \"https://50five-snl.evc-net.com\";\n    msg.method = \"POST\";\n    msg.headers = {\n        \"Content-Type\": \"application/x-www-form-urlencoded\"\n    };\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    var requests_payload = {\n        \"0\": {\n            \"handler\": \"\\\\LMS\\\\EV\\\\AsyncServices\\\\RechargeSpotsAsyncService\",\n            \"method\": \"action\",\n            \"params\": {\n                \"action\": \"StartTransaction\",\n                \"rechargeSpotId\": spotid,\n                \"clickedButtonId\": 0,\n                \"channel\": channelid,\n                \"customer\": userid,\n                \"card\": cardid\n            }\n        }\n    };\n    msg.url = baseUrl + \"/api/ajax\"\n    msg.payload = \"requests=\" + encodeURIComponent(JSON.stringify(requests_payload));\n    msg.card_idx = cardid;\n} else {\n    msg.headers = {};\n    msg.cookies = {};\n    msg.url = \"\";\n}\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
@@ -1574,7 +1579,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1615,7 +1620,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1656,7 +1661,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1697,7 +1702,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1738,7 +1743,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -1779,7 +1784,7 @@
         "type": "function",
         "z": "afe326f672e3cd97",
         "name": "Check Variables",
-        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\")\nvar channelid = flow.get(\"channelID\")\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
+        "func": "var phpsessid = flow.get(\"PHPSESSID\") || null;\nvar serverid = flow.get(\"SERVERID\") || null;\nvar spotid = flow.get(\"spotID\");\nvar channelid = flow.get(\"channelID\");\nif (phpsessid && serverid && spotid && channelid) {\n    msg.cookies = {\n        \"SERVERID\": serverid,\n        \"PHPSESSID\": phpsessid\n    };\n    return [msg, null];\n} else {\n    msg.cookies = {};\n    return [null, msg];\n}",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
@@ -2016,6 +2021,108 @@
         ]
     },
     {
+        "id": "f11916d91ae3c3e5",
+        "type": "function",
+        "z": "afe326f672e3cd97",
+        "name": "Check Variables",
+        "func": "if (msg.card_id) {\n    flow.set(\"cardID\", msg.card_id);\n} else {\n    flow.set(\"cardID\", \"\");\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1240,
+        "wires": [
+            [
+                "07b9cf556f13b294"
+            ]
+        ]
+    },
+    {
+        "id": "502ee9606df8c550",
+        "type": "switch",
+        "z": "afe326f672e3cd97",
+        "name": "Check Card",
+        "property": "cardID",
+        "propertyType": "flow",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "\"\"",
+                "vt": "str"
+            },
+            {
+                "t": "neq",
+                "v": "\"\"",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 970,
+        "y": 700,
+        "wires": [
+            [
+                "98d3cff3e1954720"
+            ],
+            [
+                "f660c49b9cd6cd8d"
+            ]
+        ]
+    },
+    {
+        "id": "f660c49b9cd6cd8d",
+        "type": "change",
+        "z": "afe326f672e3cd97",
+        "name": "Save cardID",
+        "rules": [
+            {
+                "t": "set",
+                "p": "card_list",
+                "pt": "msg",
+                "to": "payload[0]",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CARDID",
+                "pt": "msg",
+                "to": "cardID",
+                "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "spot_overview.CARDS_IDX",
+                "pt": "msg",
+                "to": "card_list[text=$$.spot_overview.CARDID].id",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "card_options",
+                "pt": "msg",
+                "to": "{\"options\": [card_list.text]}",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1130,
+        "y": 720,
+        "wires": [
+            [
+                "fda03362ccda5b6d",
+                "e095d5d4bde9b040"
+            ]
+        ]
+    },
+    {
         "id": "7801bca7eb84dbaf",
         "type": "tab",
         "label": "50five",
@@ -2040,7 +2147,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 370,
+        "x": 530,
         "y": 40,
         "wires": [
             [
@@ -2069,7 +2176,7 @@
         "y": 240,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2119,7 +2226,7 @@
         "y": 440,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2165,7 +2272,7 @@
         "once": false,
         "onceDelay": 0.1,
         "topic": "",
-        "x": 370,
+        "x": 530,
         "y": 80,
         "wires": [
             [
@@ -2294,8 +2401,8 @@
                 "ba78d643128143a7",
                 "86def0d3624278b7",
                 "1d1128fcab09b37c",
-                "f2d13a8802491c42",
-                "f7eab09251480673"
+                "f7eab09251480673",
+                "bb399c5a9824781b"
             ]
         ]
     },
@@ -2405,7 +2512,7 @@
         "y": 1060,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2515,7 +2622,7 @@
         "y": 1120,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2677,7 +2784,7 @@
         "y": 1260,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2704,7 +2811,7 @@
         "y": 1420,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -2885,11 +2992,11 @@
         "id": "5aae705f467816d5",
         "type": "poll-state",
         "z": "7801bca7eb84dbaf",
-        "name": "Poll every 5 minutes",
+        "name": "Poll every 15 minutes",
         "server": "a962aadcdd5cb1ef",
         "version": 3,
         "exposeAsEntityConfig": "",
-        "updateInterval": "5",
+        "updateInterval": "15",
         "updateIntervalType": "num",
         "updateIntervalUnits": "minutes",
         "outputInitially": true,
@@ -2908,11 +3015,11 @@
                 "valueType": "entityState"
             }
         ],
-        "x": 130,
+        "x": 140,
         "y": 1400,
         "wires": [
             [
-                "727e35e240301868"
+                "c42a218fc831357c"
             ],
             []
         ]
@@ -2980,7 +3087,7 @@
         "y": 280,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -3030,7 +3137,7 @@
         "y": 480,
         "wires": [
             [
-                "fccfd7e373f2a50f"
+                "a629244b1e8f3661"
             ]
         ]
     },
@@ -3091,30 +3198,6 @@
                 "valueType": "msg"
             },
             {
-                "property": "software_version",
-                "value": "status.SOFTWARE_VERSION",
-                "valueType": "msg"
-            }
-        ],
-        "inputOverride": "allow",
-        "outputProperties": [],
-        "x": 840,
-        "y": 480,
-        "wires": [
-            []
-        ]
-    },
-    {
-        "id": "f2d13a8802491c42",
-        "type": "ha-sensor",
-        "z": "7801bca7eb84dbaf",
-        "name": "Laadpaal Card-ID",
-        "entityConfig": "2d9ccaa955e12204",
-        "version": 0,
-        "state": "card_id",
-        "stateType": "msg",
-        "attributes": [
-            {
                 "property": "card_idx",
                 "value": "spot_overview.CARDS_IDX",
                 "valueType": "msg"
@@ -3138,12 +3221,17 @@
                 "property": "cost_center",
                 "value": "status.COST_CENTER_NUMBER",
                 "valueType": "msg"
+            },
+            {
+                "property": "software_version",
+                "value": "status.SOFTWARE_VERSION",
+                "valueType": "msg"
             }
         ],
         "inputOverride": "allow",
         "outputProperties": [],
-        "x": 830,
-        "y": 540,
+        "x": 840,
+        "y": 480,
         "wires": [
             []
         ]
@@ -3385,6 +3473,144 @@
         ],
         "x": 130,
         "y": 980,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "5dbabcac0024715e",
+        "type": "ha-select",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Card-ID",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "55e03783e012fecc",
+        "exposeAsEntityConfig": "",
+        "mode": "set",
+        "value": "spot_overview.CARDID",
+        "valueType": "msg",
+        "outputProperties": [],
+        "x": 830,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb399c5a9824781b",
+        "type": "ha-update-config",
+        "z": "7801bca7eb84dbaf",
+        "name": "Update Card Options",
+        "server": "a962aadcdd5cb1ef",
+        "entityConfig": "55e03783e012fecc",
+        "version": 0,
+        "outputProperties": [],
+        "x": 840,
+        "y": 120,
+        "wires": [
+            [
+                "96a1107b37a25a84"
+            ]
+        ]
+    },
+    {
+        "id": "96a1107b37a25a84",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "500",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1030,
+        "y": 120,
+        "wires": [
+            [
+                "8977ba23397d224c"
+            ]
+        ]
+    },
+    {
+        "id": "8977ba23397d224c",
+        "type": "api-current-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Check select state",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "unknown|unavailable",
+        "halt_if_type": "re",
+        "halt_if_compare": "is",
+        "entity_id": "select.50five_card_id",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1230,
+        "y": 120,
+        "wires": [
+            [
+                "5dbabcac0024715e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a629244b1e8f3661",
+        "type": "ha-select",
+        "z": "7801bca7eb84dbaf",
+        "name": "Get Card",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "55e03783e012fecc",
+        "exposeAsEntityConfig": "",
+        "mode": "get",
+        "value": "payload",
+        "valueType": "msg",
+        "outputProperties": [
+            {
+                "property": "card_id",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "value"
+            }
+        ],
+        "x": 480,
+        "y": 600,
         "wires": [
             [
                 "fccfd7e373f2a50f"
@@ -3790,47 +4016,6 @@
         "debugEnabled": false
     },
     {
-        "id": "2d9ccaa955e12204",
-        "type": "ha-entity-config",
-        "server": "a962aadcdd5cb1ef",
-        "deviceConfig": "8b0d0b1b2ee28c9b",
-        "name": "50five Card-ID",
-        "version": 6,
-        "entityType": "sensor",
-        "haConfig": [
-            {
-                "property": "name",
-                "value": "50five Card-ID"
-            },
-            {
-                "property": "icon",
-                "value": "mdi:card-bulleted"
-            },
-            {
-                "property": "entity_picture",
-                "value": ""
-            },
-            {
-                "property": "entity_category",
-                "value": ""
-            },
-            {
-                "property": "device_class",
-                "value": ""
-            },
-            {
-                "property": "unit_of_measurement",
-                "value": ""
-            },
-            {
-                "property": "state_class",
-                "value": ""
-            }
-        ],
-        "resend": false,
-        "debugEnabled": false
-    },
-    {
         "id": "ebb6d680553e987e",
         "type": "ha-entity-config",
         "server": "a962aadcdd5cb1ef",
@@ -4037,6 +4222,41 @@
         "debugEnabled": false
     },
     {
+        "id": "55e03783e012fecc",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Card-ID",
+        "version": 6,
+        "entityType": "select",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Card-ID"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "config"
+            },
+            {
+                "property": "options",
+                "value": [
+                    "none"
+                ]
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
         "id": "8b0d0b1b2ee28c9b",
         "type": "ha-device-config",
         "name": "Laadpaal",
@@ -4046,7 +4266,7 @@
         "swVersion": ""
     },
     {
-        "id": "51462e6a09bc342e",
+        "id": "b1a210999e54a44d",
         "type": "global-config",
         "env": [],
         "modules": {
