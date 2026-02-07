@@ -1,8 +1,13 @@
-# This is the Node Red flow for 50five charging station - version 2.1
+# This is the Node Red flow for 50five charging station
 
 * Import the file into Node Red
 * Change the URL, username and password on the subflow
 * Publish the flow
+
+## Release notes version 2.1
+* Card-ID sensor replaced by select entity. 
+* No more manual configuration changes needed when using another card.
+* Attributes Card idx, Customer idx, Customer name, Customer address, Cost center moved to Connector sensor 
 
 ## Current flow 50five_v2.1.json supports:
 * Login
@@ -31,7 +36,7 @@
   * Attributes: Spot idx, Channel ID, Card idx, Customer idx, Customer name, Customer address, Cost center, Software version
 
 * 50five Status
-  * Attributes: Data (transaction log information)
+  * Attributes: Data (transaction log information in markdown language)
 
 ## Home Assistant select:
 * 50five Card-ID (select your charging card)
