@@ -48,8 +48,8 @@
             },
             {
                 "name": "password",
-                "value": "<your password here>",
                 "type": "cred",
+                "value": "<your password here>",
                 "ui": {
                     "icon": "font-awesome/fa-unlock-alt",
                     "label": {
@@ -1147,9 +1147,9 @@
         "rules": [
             {
                 "t": "set",
-                "p": "cardList",
+                "p": "card_list",
                 "pt": "flow",
-                "to": "test_data",
+                "to": "payload[0]",
                 "tot": "msg"
             },
             {
@@ -1170,7 +1170,7 @@
                 "t": "set",
                 "p": "card_options",
                 "pt": "msg",
-                "to": "{\"options\": test_data.text}",
+                "to": "{\"options\": [card_list.text]}",
                 "tot": "jsonata"
             }
         ],
@@ -2139,5 +2139,2156 @@
         "x": 1080,
         "y": 320,
         "wires": []
+    },
+    {
+        "id": "7801bca7eb84dbaf",
+        "type": "tab",
+        "label": "50five",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fb419651251e9150",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Login",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "login",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 530,
+        "y": 40,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "c1e482c447619238",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "start",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "0e68820a56fb8fc9",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "stop",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 340,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "90a2401d152fa35f",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "poll",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 440,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "a3770db499d96007",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Soft Reset",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "soft-reset",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 100,
+        "y": 540,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "f697e22eb9f3d098",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Logout",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "logout",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 530,
+        "y": 80,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "6ac6eea04cf98b95",
+        "type": "mqtt out",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Output",
+        "topic": "",
+        "qos": "0",
+        "retain": "false",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "91e30fc5ccf91f78",
+        "x": 960,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "6dab1089e1b0cb2d",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set topic",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "50five/status",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "spot_overview.NOTIFICATION",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 800,
+        "y": 180,
+        "wires": [
+            [
+                "6ac6eea04cf98b95"
+            ]
+        ]
+    },
+    {
+        "id": "382121f46e1842a5",
+        "type": "mqtt in",
+        "z": "7801bca7eb84dbaf",
+        "name": "MQTT Action",
+        "topic": "50five/action",
+        "qos": "0",
+        "datatype": "utf8",
+        "broker": "91e30fc5ccf91f78",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 180,
+        "wires": [
+            [
+                "aae1a1a38b69351f"
+            ]
+        ]
+    },
+    {
+        "id": "aae1a1a38b69351f",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Set payload",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 310,
+        "y": 180,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "fccfd7e373f2a50f",
+        "type": "subflow:afe326f672e3cd97",
+        "z": "7801bca7eb84dbaf",
+        "name": "50five (subflow)",
+        "env": [
+            {
+                "name": "password",
+                "type": "cred"
+            }
+        ],
+        "x": 580,
+        "y": 240,
+        "wires": [
+            [
+                "6dab1089e1b0cb2d",
+                "46cb2363cb70d6a5",
+                "e9d7987951ce0357",
+                "ba78d643128143a7",
+                "86def0d3624278b7",
+                "1d1128fcab09b37c",
+                "f7eab09251480673",
+                "bb399c5a9824781b"
+            ]
+        ]
+    },
+    {
+        "id": "4e842f1ab9749a43",
+        "type": "ha-wait-until",
+        "z": "7801bca7eb84dbaf",
+        "name": "Location",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "device_tracker.t_819_xr_device_tracker"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "home",
+        "valueType": "str",
+        "timeout": "10",
+        "timeoutType": "num",
+        "timeoutUnits": "minutes",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "entityLocation": "data",
+        "entityLocationType": "none",
+        "x": 560,
+        "y": 1060,
+        "wires": [
+            [
+                "2281c165366c5695"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "ff52d72b9f227131",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.t_819_xr_charge_flap_dc_status"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "0",
+        "ifStateType": "num",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 240,
+        "y": 1060,
+        "wires": [
+            [
+                "4e842f1ab9749a43"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "2281c165366c5695",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Charging",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "start",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 1060,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "98d1459798c9d1c3",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 2,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.t_819_xr_charging_power"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": true,
+        "stateType": "str",
+        "ifState": "0",
+        "ifStateType": "num",
+        "ifStateOperator": "gt",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "number",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 220,
+        "y": 1120,
+        "wires": [
+            [
+                "430fb63956da77df"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "430fb63956da77df",
+        "type": "ha-wait-until",
+        "z": "7801bca7eb84dbaf",
+        "name": "Location",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "entities": {
+            "entity": [
+                "device_tracker.t_819_xr_device_tracker"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "property": "state",
+        "comparator": "is",
+        "value": "home",
+        "valueType": "str",
+        "timeout": "10",
+        "timeoutType": "num",
+        "timeoutUnits": "minutes",
+        "checkCurrentState": true,
+        "blockInputOverrides": true,
+        "outputProperties": [],
+        "entityLocation": "data",
+        "entityLocationType": "none",
+        "x": 560,
+        "y": 1120,
+        "wires": [
+            [
+                "d8697f7a8975c2b3"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "d8697f7a8975c2b3",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Polling",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "poll",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 750,
+        "y": 1120,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "1dbd3e7cbb974ab7",
+        "type": "server-state-changed",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "server": "a962aadcdd5cb1ef",
+        "version": 6,
+        "outputs": 1,
+        "exposeAsEntityConfig": "",
+        "entities": {
+            "entity": [
+                "sensor.50five_status"
+            ],
+            "substring": [],
+            "regex": []
+        },
+        "outputInitially": false,
+        "stateType": "str",
+        "ifState": "",
+        "ifStateType": "str",
+        "ifStateOperator": "is",
+        "outputOnlyOnStateChange": false,
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "ignorePrevStateNull": true,
+        "ignorePrevStateUnknown": true,
+        "ignorePrevStateUnavailable": true,
+        "ignoreCurrentStateUnknown": true,
+        "ignoreCurrentStateUnavailable": true,
+        "outputProperties": [
+            {
+                "property": "enable",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            },
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 180,
+        "y": 1200,
+        "wires": [
+            [
+                "4f3d840b9954cf3a"
+            ]
+        ]
+    },
+    {
+        "id": "4f3d840b9954cf3a",
+        "type": "trigger",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "op1": "",
+        "op2": "",
+        "op1type": "nul",
+        "op2type": "pay",
+        "duration": "5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 540,
+        "y": 1200,
+        "wires": [
+            [
+                "86308813ac58a8dd"
+            ]
+        ]
+    },
+    {
+        "id": "86308813ac58a8dd",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "enable",
+                "pt": "msg",
+                "to": "$contains(\"ChargingLaden (vol)OccupiedTransactionTransactie voorbereiden\",$.enable)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 720,
+        "y": 1200,
+        "wires": [
+            [
+                "af65a2c24aa736f0"
+            ]
+        ]
+    },
+    {
+        "id": "af65a2c24aa736f0",
+        "type": "ha-switch",
+        "z": "7801bca7eb84dbaf",
+        "name": "50five Charging switch",
+        "version": 0,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 2,
+        "entityConfig": "b7286b07244e38f8",
+        "enableInput": true,
+        "outputOnStateChange": true,
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 520,
+        "y": 1260,
+        "wires": [
+            [
+                "fddce25d177b820b"
+            ],
+            [
+                "29674594a4a3f0a1"
+            ]
+        ]
+    },
+    {
+        "id": "fddce25d177b820b",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start charging",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "start",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 760,
+        "y": 1260,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "09072c96639f898c",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start Polling",
+        "rules": [
+            {
+                "t": "set",
+                "p": "50five.action",
+                "pt": "msg",
+                "to": "poll",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 790,
+        "y": 1420,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "d7732ffb7038ab9f",
+        "type": "change",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop or reset charging",
+        "rules": [
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Laden (vol)",
+                "fromt": "str",
+                "to": "stop",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Laden",
+                "fromt": "str",
+                "to": "stop",
+                "tot": "str"
+            },
+            {
+                "t": "change",
+                "p": "50five.action",
+                "pt": "msg",
+                "from": "Transactie voorbereiden",
+                "fromt": "str",
+                "to": "soft-reset",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 1320,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "29674594a4a3f0a1",
+        "type": "api-current-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Voorbereiding of Laden",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 1,
+        "halt_if": "",
+        "halt_if_type": "str",
+        "halt_if_compare": "is",
+        "entity_id": "sensor.50five_status",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entityState"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 510,
+        "y": 1320,
+        "wires": [
+            [
+                "d7732ffb7038ab9f"
+            ]
+        ]
+    },
+    {
+        "id": "727e35e240301868",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "5",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 1420,
+        "wires": [
+            [
+                "09072c96639f898c"
+            ]
+        ]
+    },
+    {
+        "id": "c42a218fc831357c",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "15",
+        "rateUnits": "minute",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": true,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 500,
+        "y": 1460,
+        "wires": [
+            [
+                "09072c96639f898c"
+            ]
+        ]
+    },
+    {
+        "id": "10551a808afb423a",
+        "type": "poll-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll every 5 minutes",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "exposeAsEntityConfig": "",
+        "updateInterval": "5",
+        "updateIntervalType": "num",
+        "updateIntervalUnits": "minutes",
+        "outputInitially": true,
+        "outputOnChanged": false,
+        "entityId": "sensor.50five_status",
+        "stateType": "str",
+        "ifState": "$contains(\"LadenGeblokkeerdTransactie voorbereiden\",$entity().state)",
+        "ifStateType": "jsonata",
+        "ifStateOperator": "jsonata",
+        "outputs": 2,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 130,
+        "y": 1460,
+        "wires": [
+            [
+                "727e35e240301868"
+            ],
+            [
+                "c42a218fc831357c"
+            ]
+        ]
+    },
+    {
+        "id": "5aae705f467816d5",
+        "type": "poll-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll every 15 minutes",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "exposeAsEntityConfig": "",
+        "updateInterval": "60",
+        "updateIntervalType": "num",
+        "updateIntervalUnits": "seconds",
+        "outputInitially": true,
+        "outputOnChanged": true,
+        "entityId": "input_boolean.ha_running",
+        "stateType": "habool",
+        "ifState": "true",
+        "ifStateType": "bool",
+        "ifStateOperator": "is",
+        "outputs": 2,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            }
+        ],
+        "x": 140,
+        "y": 1400,
+        "wires": [
+            [
+                "c42a218fc831357c"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "46cb2363cb70d6a5",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Power",
+        "entityConfig": "5066435a6134f562",
+        "version": 0,
+        "state": "power",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e9d7987951ce0357",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Status",
+        "entityConfig": "0b496c3608a8d29e",
+        "version": 0,
+        "state": "spot_overview.NOTIFICATION",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "data",
+                "value": "logging",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2be6ccce5e41b274",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Start",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "3fd2d0877448559f",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "start",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 280,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "56d5e4180dee01f1",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Stop",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "6566ca32ce67e468",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "stop",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 380,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "cd938daf288780c8",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Poll",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "b430fa7abafaa161",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "poll",
+                "valueType": "str"
+            }
+        ],
+        "x": 90,
+        "y": 480,
+        "wires": [
+            [
+                "a629244b1e8f3661"
+            ]
+        ]
+    },
+    {
+        "id": "ba78d643128143a7",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Energy",
+        "entityConfig": "7ff0180e82cb7b26",
+        "version": 0,
+        "state": "energy",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 830,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "86def0d3624278b7",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Transaction time",
+        "entityConfig": "b42a68147137e86c",
+        "version": 0,
+        "state": "time",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 820,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1d1128fcab09b37c",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Connector",
+        "entityConfig": "4e3f28e5cdc14525",
+        "version": 0,
+        "state": "spot_overview.CONNECTOR",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "spot_idx",
+                "value": "status.IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "channel_id",
+                "value": "spot_overview.CHANNEL",
+                "valueType": "msg"
+            },
+            {
+                "property": "card_idx",
+                "value": "spot_overview.CARDS_IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_idx",
+                "value": "spot_overview.CUSTOMERS_IDX",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_name",
+                "value": "spot_overview.CUSTOMER_NAME",
+                "valueType": "msg"
+            },
+            {
+                "property": "customer_address",
+                "value": "status.ADDRESS",
+                "valueType": "msg"
+            },
+            {
+                "property": "cost_center",
+                "value": "status.COST_CENTER_NUMBER",
+                "valueType": "msg"
+            },
+            {
+                "property": "software_version",
+                "value": "status.SOFTWARE_VERSION",
+                "valueType": "msg"
+            }
+        ],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 840,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f7eab09251480673",
+        "type": "ha-sensor",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Total Energy",
+        "entityConfig": "ebb6d680553e987e",
+        "version": 0,
+        "state": "totalEnergy_kWh",
+        "stateType": "msg",
+        "attributes": [],
+        "inputOverride": "allow",
+        "outputProperties": [],
+        "x": 840,
+        "y": 600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ea75ec70eb3a4162",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Hard Reset",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "hard-reset",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 640,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "7c818a9a25dbf929",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unlock Connector",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "unlock",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 740,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "63a72f73380b5ac5",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Block Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "block",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 120,
+        "y": 840,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "7f034ee067b8329e",
+        "type": "inject",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unblock Charging",
+        "props": [
+            {
+                "p": "50five.action",
+                "v": "unblock",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 130,
+        "y": 940,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "350bf313a10d5e1e",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Soft Reset",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "49aa13ff46f41486",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "soft-reset",
+                "valueType": "str"
+            }
+        ],
+        "x": 100,
+        "y": 580,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "d982959ab0e9ce09",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Hard Reset",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "a706354ccf0e86fa",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "hard-reset",
+                "valueType": "str"
+            }
+        ],
+        "x": 110,
+        "y": 680,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "21d8eee162b442fc",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unlock Connector",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "70498a44e7b6b601",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "unlock",
+                "valueType": "str"
+            }
+        ],
+        "x": 130,
+        "y": 780,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "1404c53a37a0ddcd",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Block Charging",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "8ea4bf96d1e09a41",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "block",
+                "valueType": "str"
+            }
+        ],
+        "x": 120,
+        "y": 880,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "959a71f5038a643c",
+        "type": "ha-button",
+        "z": "7801bca7eb84dbaf",
+        "name": "Unblock Charging",
+        "version": 0,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityConfig": "6932318865288885",
+        "outputProperties": [
+            {
+                "property": "50five.action",
+                "propertyType": "msg",
+                "value": "unblock",
+                "valueType": "str"
+            }
+        ],
+        "x": 130,
+        "y": 980,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "5dbabcac0024715e",
+        "type": "ha-select",
+        "z": "7801bca7eb84dbaf",
+        "name": "Laadpaal Card-ID",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "55e03783e012fecc",
+        "exposeAsEntityConfig": "",
+        "mode": "set",
+        "value": "spot_overview.CARDID",
+        "valueType": "msg",
+        "outputProperties": [],
+        "x": 830,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "bb399c5a9824781b",
+        "type": "ha-update-config",
+        "z": "7801bca7eb84dbaf",
+        "name": "Update Card Options",
+        "server": "a962aadcdd5cb1ef",
+        "entityConfig": "55e03783e012fecc",
+        "version": 0,
+        "outputProperties": [],
+        "x": 840,
+        "y": 120,
+        "wires": [
+            [
+                "96a1107b37a25a84"
+            ]
+        ]
+    },
+    {
+        "id": "96a1107b37a25a84",
+        "type": "delay",
+        "z": "7801bca7eb84dbaf",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "500",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1030,
+        "y": 120,
+        "wires": [
+            [
+                "8977ba23397d224c"
+            ]
+        ]
+    },
+    {
+        "id": "8977ba23397d224c",
+        "type": "api-current-state",
+        "z": "7801bca7eb84dbaf",
+        "name": "Check select state",
+        "server": "a962aadcdd5cb1ef",
+        "version": 3,
+        "outputs": 2,
+        "halt_if": "unknown|unavailable",
+        "halt_if_type": "re",
+        "halt_if_compare": "is",
+        "entity_id": "select.50five_card_id",
+        "state_type": "str",
+        "blockInputOverrides": true,
+        "outputProperties": [
+            {
+                "property": "payload",
+                "propertyType": "msg",
+                "value": "string",
+                "valueType": "entityState"
+            },
+            {
+                "property": "data",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "entity"
+            }
+        ],
+        "for": "0",
+        "forType": "num",
+        "forUnits": "minutes",
+        "override_topic": false,
+        "state_location": "payload",
+        "override_payload": "msg",
+        "entity_location": "data",
+        "override_data": "msg",
+        "x": 1230,
+        "y": 120,
+        "wires": [
+            [
+                "5dbabcac0024715e"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "a629244b1e8f3661",
+        "type": "ha-select",
+        "z": "7801bca7eb84dbaf",
+        "name": "Get Card",
+        "version": 1,
+        "debugenabled": false,
+        "inputs": 1,
+        "outputs": 1,
+        "entityConfig": "55e03783e012fecc",
+        "exposeAsEntityConfig": "",
+        "mode": "get",
+        "value": "payload",
+        "valueType": "msg",
+        "outputProperties": [
+            {
+                "property": "card_id",
+                "propertyType": "msg",
+                "value": "",
+                "valueType": "value"
+            }
+        ],
+        "x": 480,
+        "y": 600,
+        "wires": [
+            [
+                "fccfd7e373f2a50f"
+            ]
+        ]
+    },
+    {
+        "id": "91e30fc5ccf91f78",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "192.168.2.205",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "a962aadcdd5cb1ef",
+        "type": "server",
+        "name": "Home Assistant",
+        "version": 6,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": [
+            "y",
+            "yes",
+            "true",
+            "on",
+            "home",
+            "open"
+        ],
+        "connectionDelay": true,
+        "cacheJson": true,
+        "heartbeat": false,
+        "heartbeatInterval": "30",
+        "areaSelector": "friendlyName",
+        "deviceSelector": "friendlyName",
+        "entitySelector": "friendlyName",
+        "statusSeparator": ": ",
+        "statusYear": "hidden",
+        "statusMonth": "short",
+        "statusDay": "numeric",
+        "statusHourCycle": "default",
+        "statusTimeFormat": "h:m",
+        "enableGlobalContextStore": false
+    },
+    {
+        "id": "b7286b07244e38f8",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Charging switch",
+        "version": 6,
+        "entityType": "switch",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Charging switch"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "config"
+            },
+            {
+                "property": "device_class",
+                "value": "switch"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "5066435a6134f562",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Power",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Power"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "power"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kW"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "0b496c3608a8d29e",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Status",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Status"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "3fd2d0877448559f",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Start",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Start"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:play-circle"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6566ca32ce67e468",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Stop",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Stop"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:stop-circle"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "b430fa7abafaa161",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Poll",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Poll"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "7ff0180e82cb7b26",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Energy"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:lightning-bolt"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "total_increasing"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "b42a68147137e86c",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Transaction time",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Transaction time"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:timer"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "duration"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "min"
+            },
+            {
+                "property": "state_class",
+                "value": "measurement"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "4e3f28e5cdc14525",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Connector",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Connector"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:connection"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            },
+            {
+                "property": "state_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "ebb6d680553e987e",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Total Energy",
+        "version": 6,
+        "entityType": "sensor",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Total Energy"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "diagnostic"
+            },
+            {
+                "property": "device_class",
+                "value": "energy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kWh"
+            },
+            {
+                "property": "state_class",
+                "value": "total_increasing"
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "49aa13ff46f41486",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Soft Reset",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Soft Reset"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "a706354ccf0e86fa",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Hard Reset",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Hard Reset"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "70498a44e7b6b601",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Unlock Connector",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Unlock Connector"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8ea4bf96d1e09a41",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Block Charging",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Block Charging"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "6932318865288885",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Unblock Charging",
+        "version": 6,
+        "entityType": "button",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Unblock Charging"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": ""
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "55e03783e012fecc",
+        "type": "ha-entity-config",
+        "server": "a962aadcdd5cb1ef",
+        "deviceConfig": "8b0d0b1b2ee28c9b",
+        "name": "50five Card-ID",
+        "version": 6,
+        "entityType": "select",
+        "haConfig": [
+            {
+                "property": "name",
+                "value": "50five Card-ID"
+            },
+            {
+                "property": "icon",
+                "value": ""
+            },
+            {
+                "property": "entity_picture",
+                "value": ""
+            },
+            {
+                "property": "entity_category",
+                "value": "config"
+            },
+            {
+                "property": "options",
+                "value": [
+                    "none"
+                ]
+            }
+        ],
+        "resend": false,
+        "debugEnabled": false
+    },
+    {
+        "id": "8b0d0b1b2ee28c9b",
+        "type": "ha-device-config",
+        "name": "Laadpaal",
+        "hwVersion": "",
+        "manufacturer": "Node-RED",
+        "model": "",
+        "swVersion": ""
+    },
+    {
+        "id": "1b197af02671b8c3",
+        "type": "global-config",
+        "env": [],
+        "modules": {
+            "node-red-contrib-home-assistant-websocket": "0.80.3"
+        }
     }
 ]
